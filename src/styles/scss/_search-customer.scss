@@ -1,0 +1,19 @@
+.home {
+    .search-customer {
+        display: flex;
+        flex-direction: column;
+        height: 93vh;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .upper { margin-bottom: 20px }
+
+    }
+
+    div:last-child { float: right }
+}

@@ -1,0 +1,56 @@
+.customer-bill {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    padding-bottom: 100px;
+
+    header {
+        width: 85%;
+        position: fixed;
+        left: 100px;
+        top: -20px;
+        background-color: getColor($themeColor, lighter);
+        padding: 15px 0;
+
+        h1 {
+            width: fit-content;
+            padding-bottom: 5px;
+            margin: 0;
+            position: initial;
+        }
+
+        strong {
+            color: getColor($themeColor, danger);
+            font-size: 13px;
+            font-weight: 300;
+        }
+    }
+
+    &__actions {
+        position: fixed;
+        top: 235px;
+        right: 100px;
+        width: 181px;
+        display: flex;
+        flex-direction: column;
+
+        button {
+            width: 100%;
+            margin-bottom: 18px;
+        }
+    }
+
+    .empty {
+        color: getColor($themeColor, light);
+        text-align: center;
+        margin-top: 160px;
+    }
+
+    &__items {
+        width: 75%;
+        animation-name: slideUp;
+        animation-duration: .5s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+    }
+}

@@ -1,0 +1,26 @@
+@function getColor($color-group, $color-name) {
+    @return map-get($color-group, $color-name);
+}
+
+$themeColor: (
+    primary :  #fff,
+    light   :  #a9a9a9,
+    lighter :  #eee,
+    inverse :  #000,
+    danger  :  #f50057,
+    selected:  #d5d5d5
+);
+
+@keyframes fadeIn {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+
+@keyframes slideUp {
+    from { margin-top: 500px }
+    to { margin-top: 100px }
+}

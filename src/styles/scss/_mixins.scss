@@ -1,0 +1,17 @@
+@mixin column-form {
+    &__form-fields {
+        display: flex;
+        flex-direction: column;
+
+        div {
+            width: 225px;
+            margin-bottom: 10px
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin: auto;
+        }
+    }
+}

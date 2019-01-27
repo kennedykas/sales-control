@@ -1,0 +1,14 @@
+/* width */
+::-webkit-scrollbar { width: 8px }
+
+/* Track */
+::-webkit-scrollbar-track { background: getColor($themeColor, lighter) }
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: getColor($themeColor, light);;
+    border-radius:4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover { background: getColor($themeColor, light); }

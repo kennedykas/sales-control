@@ -1,0 +1,9 @@
+.customer {
+
+    @include column-form();
+
+    &__form-fields {
+        align-items: center;
+        margin-top: 100px;
+    }
+}
