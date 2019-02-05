@@ -4,32 +4,10 @@
     justify-content: flex-start;
     padding-bottom: 100px;
 
-    header {
-        width: 85%;
-        position: fixed;
-        left: 100px;
-        top: -20px;
-        background-color: getColor($themeColor, lighter);
-        padding: 15px 0;
-
-        h1 {
-            width: fit-content;
-            padding-bottom: 5px;
-            margin: 0;
-            position: initial;
-        }
-
-        strong {
-            color: getColor($themeColor, danger);
-            font-size: 13px;
-            font-weight: 300;
-        }
-    }
-
     &__actions {
         position: fixed;
         top: 235px;
-        right: 100px;
+        right: 9vw;
         width: 181px;
         display: flex;
         flex-direction: column;

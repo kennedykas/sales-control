@@ -3,6 +3,7 @@ import TextField            from '@material-ui/core/TextField';
 import Button               from '@material-ui/core/Button';
 import Snackbar             from '@material-ui/core/Snackbar';
 import NavLink              from 'react-router-dom/NavLink';
+import PersonAdd            from '@material-ui/icons/PersonAdd';
 
 export class Customer extends Component {
 
@@ -20,7 +21,7 @@ export class Customer extends Component {
             { client: JSON.parse(localStorage.getItem('client')) },
             function() {
                 if (this.state.client.id) {
-                    fetch(`http://localhost:3000/api/clients/'${this.state.client.id}`)
+                    fetch(`http://localhost:3000/api/clients/${Number(this.state.client.id)}`)
                     .then(res => res.json())
                     .then(
                         (result) => {
@@ -45,13 +46,13 @@ export class Customer extends Component {
             return <div>Error: { error.message }</div>;
 
         else if (!isLoaded)
-            return <div>Loading...</div>;
+            return <div>Carregando...</div>;
 
         else {
             return (
             <section className="customer">
 
-                <h2 className="title">📂 Cliente</h2>
+                <header><h2><PersonAdd /> Cliente</h2></header>
 
                 <form className="customer__form-fields">
                     <TextField

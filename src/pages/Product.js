@@ -50,19 +50,13 @@ export class Product extends Component {
             return <div>Error: { error.message }</div>;
 
         else if (!isLoaded)
-            return <div>Loading...</div>;
+            return <div>Carregando...</div>;
 
         else {
             return (
             <section className="products">
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open        ={ this.state.toast.open }
-                    onClose     ={ () => this.closeToast() }
-                    message     ={ this.state.toast.message }
-                    autoHideDuration={ 3500 } />
 
-                <h2 className="title">📦 { this.state.products.length - 1 } Produtos</h2>
+                <header><h2>{ this.state.products.length - 1 } Produtos</h2></header>
 
                 <Paper className="products__list">
                     <Table>
@@ -142,6 +136,13 @@ export class Product extends Component {
                         </Button>
                     </div>
                 </form>
+
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open        ={ this.state.toast.open }
+                    onClose     ={ () => this.closeToast() }
+                    message     ={ this.state.toast.message }
+                    autoHideDuration={ 3500 } />
             </section>
             )
         }

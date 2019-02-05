@@ -91,14 +91,14 @@ export class CustomerBill extends Component {
             return <div>Error: { error.message }</div>;
 
         else if (!isLoaded)
-            return <div>Loading...</div>;
+            return <div>Carregando...</div>;
 
         else {
             return (
             <>
             <section className="customer-bill">
                 <header>
-                    <h1 className="title">{ this.state.client.name } { this.clientStatus() }</h1>
+                    <h2>{ this.state.client.name } { this.clientStatus() }</h2>
                     <strong>*Importante, o valor dos produtos está sujeito a reajustes sem aviso prévio.</strong>
                 </header>
 
@@ -134,8 +134,8 @@ export class CustomerBill extends Component {
                                     </TableCell>
                                     <TableCell numeric>
                                         { item.p_value ?
-                                                root.intl.format(item.s_quantity * item.p_value) :
-                                                root.intl.format(item.s_payment) }
+                                            root.intl.format(item.s_quantity * item.p_value) :
+                                            root.intl.format(item.s_payment) }
                                     </TableCell>
                                 </TableRow>
                             );})}
@@ -315,7 +315,7 @@ export class CustomerBill extends Component {
 
     openRowDetails(e) {
 
-        if (!this.state.managingItem && this.state.selectedRow) {
+        if (!this.state.managingItem && this.state.selectedRow >= 0) {
             e.preventDefault();
             document.querySelector('tbody').children[this.state.selectedRow].children[0].click();
         }

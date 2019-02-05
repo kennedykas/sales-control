@@ -11,17 +11,18 @@
     margin-top: 500px;
   }
   to {
-    margin-top: 100px;
+    margin-top: 5vh;
   }
 }
 body {
   width: 85%;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #eee;
+  font-size: 1em;
 }
 body a {
   text-decoration: none;
@@ -38,17 +39,29 @@ body .upper input {
 body div[class^=MuiDialogContent] {
   padding-top: 10px;
 }
-body .title {
-  position: fixed;
-  top: -20px;
-  background-color: #eee;
-  padding: 15px 0;
+body tr[class*=-selected-], body tr:hover {
+  background-color: #d5d5d5 !important;
+}
+
+header {
   width: 100%;
+  margin: 0;
+  padding: 0 0 3vh 0;
+  position: sticky;
+  top: 0;
+  background-color: #eee;
+  -moz-box-shadow: 0px 6px 32px 15px #eeeeee;
+  box-shadow: 0px 6px 32px 15px #eeeeee;
+}
+header h2 {
+  margin-bottom: 0;
   font-weight: 400;
   animation: fadeIn 1s;
 }
-body tr[class*=-selected-] {
-  background-color: #d5d5d5 !important;
+header strong {
+  color: #f50057;
+  font-size: 0.9em;
+  font-weight: 300;
 }
 
 /* width */
@@ -105,7 +118,7 @@ body tr[class*=-selected-] {
 }
 .customer__form-fields {
   align-items: center;
-  margin-top: 100px;
+  margin-top: 20vh;
 }
 
 .customer-bill {
@@ -114,29 +127,10 @@ body tr[class*=-selected-] {
   justify-content: flex-start;
   padding-bottom: 100px;
 }
-.customer-bill header {
-  width: 85%;
-  position: fixed;
-  left: 100px;
-  top: -20px;
-  background-color: #eee;
-  padding: 15px 0;
-}
-.customer-bill header h1 {
-  width: fit-content;
-  padding-bottom: 5px;
-  margin: 0;
-  position: initial;
-}
-.customer-bill header strong {
-  color: #f50057;
-  font-size: 13px;
-  font-weight: 300;
-}
 .customer-bill__actions {
   position: fixed;
   top: 235px;
-  right: 100px;
+  right: 9vw;
   width: 181px;
   display: flex;
   flex-direction: column;
@@ -184,7 +178,7 @@ body tr[class*=-selected-] {
 .products__form-fields {
   position: fixed;
   top: 220px;
-  right: 100px;
+  right: 9vw;
   width: fit-content;
 }
 

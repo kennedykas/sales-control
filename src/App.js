@@ -16,7 +16,7 @@ class App extends Component {
     addNavigation() {
 
         document.addEventListener('keypress', function(e) {
-            if (e.key === '\\') window.location = 'http://localhost/build/#/';
+            if (e.key === '\\') window.location = '#/';
         });
     }
 
