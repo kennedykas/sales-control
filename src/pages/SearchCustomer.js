@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import NavLink              from 'react-router-dom/NavLink';
 import { withRouter }       from "react-router-dom";
@@ -16,19 +17,31 @@ export class SearchCustomer extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:3000/api/clients')
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({ isLoaded: true, clients: result });
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    this.setState({ isLoaded: true, error });
-                }
-            );
+
+        this.getClients();
+    }
+
+    getClients(page) {
+
+        let p = page ? page : 1;
+        fetch(`http://localhost:3000/api/clients?_p=${p}&_size=100`)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                if (result.length) {
+                    let clients = this.state.clients;
+                    clients = clients.concat(result);
+                    this.setState({ 'clients': clients }, () => { this.getClients(++p); });
+                } else
+                    this.setState({ isLoaded: true });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+                this.setState({ isLoaded: true, error });
+            }
+        );
     }
 
     render() {
@@ -83,7 +96,7 @@ export class SearchCustomer extends Component {
         client.name = e.target.value.toUpperCase();
         client.id   = clientOption ? clientOption.dataset.key : null;
 
-        this.setState({ 'client': client }, function () {
+        this.setState({ 'client': client }, () => {
             localStorage.setItem('client', JSON.stringify(client));
         });
     }

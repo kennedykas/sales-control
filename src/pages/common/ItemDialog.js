@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import TextField     from '@material-ui/core/TextField';
 import Button        from '@material-ui/core/Button';
@@ -231,7 +232,7 @@ export class ItemDialog extends Component {
 
         const root = this;
 
-        this.setState({ 'toast': toast }, function(){
+        this.setState({ 'toast': toast }, () => {
             root.props.close();
             root.props.refresh();
         });

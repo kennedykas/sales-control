@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import Button            from '@material-ui/core/Button';
 import Table             from '@material-ui/core/Table';
@@ -42,10 +43,8 @@ export class CustomerBill extends Component {
     componentDidMount() {
 
         this.setState(
-            { 'client': JSON.parse(localStorage.getItem('client')) },
-
-            function() {
-
+            { 'client': JSON.parse(localStorage.getItem('client')), 'items': [] },
+            () => {
                 if (this.state.client && this.state.client.id)
                     this.getSales();
                 else
@@ -54,13 +53,19 @@ export class CustomerBill extends Component {
         );
     }
 
-    getSales() {
+    getSales(page) {
 
-        fetch(`http://localhost:3000/api/xjoin?_join=s.sales,_j,p.products&_on1=(s.product,eq,p.id)&_fields=s.id,s.date,s.quantity,s.payment,p.id,p.value,p.name&_where=(s.client,like,${this.state.client.id}~)&_sort=s.date,s.id`)
+        let p = page ? page : 1;
+        fetch(`http://localhost:3000/api/xjoin?_p=${p}&_size=100&_join=s.sales,_j,p.products&_on1=(s.product,eq,p.id)&_fields=s.id,s.date,s.quantity,s.payment,p.id,p.value,p.name&_where=(s.client,like,${this.state.client.id}~)&_sort=s.date,s.id`)
         .then(res => res.json())
         .then(
             (result) => {
-                this.setState({ isLoaded: true, items: result });
+                if (result.length) {
+                    let items = this.state.items;
+                    items = items.concat(result);
+                    this.setState({ 'items': items }, () => { this.getSales(++p); });
+                } else
+                    this.setState({ isLoaded: true });
             },
             (error) => {
                 this.setState({ isLoaded: true, error });
@@ -120,7 +125,7 @@ export class CustomerBill extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                            { items.map(function(item, i) { return (
+                            { items.map((item, i) => { return (
                                 <TableRow
                                     onClick ={ e => root.editRowInfo(e) }
                                     selected={ root.state.selectedRow === i }
@@ -205,9 +210,7 @@ export class CustomerBill extends Component {
         const item = {};
         item.s_quantity = 1;
 
-        this.setState({ 'item': item }, function() {
-            this.toggleItemDialog();
-        });
+        this.setState({ 'item': item }, () => this.toggleItemDialog() );
     }
 
     toggleItemDialog() {
@@ -215,9 +218,7 @@ export class CustomerBill extends Component {
     }
 
     showNewPaymentDialog() {
-        this.setState({ item: {} }, function(){
-            this.toggleItemDialog();
-        });
+        this.setState({ item: {} }, () => this.toggleItemDialog() );
     }
 
     toggleClearDialog() {
@@ -226,9 +227,7 @@ export class CustomerBill extends Component {
 
         let root = this;
 
-        setTimeout(function() {
-            root.setState({ cleaningUp: false });
-        }, 5000);
+        setTimeout(() => root.setState({ cleaningUp: false }), 5000);
     };
 
     editRowInfo(e) {
@@ -236,9 +235,7 @@ export class CustomerBill extends Component {
         const id   = e.currentTarget.rowIndex - 1;
         const item = this.state.items[id];
 
-        this.setState({ 'item': item }, function() {
-            this.toggleItemDialog();
-        });
+        this.setState({ 'item': item }, () => this.toggleItemDialog());
     }
 
     clientStatus() {
@@ -257,7 +254,7 @@ export class CustomerBill extends Component {
     getTotal() {
 
         const total =
-            this.state.items.reduce(function (sum, items) {
+            this.state.items.reduce((sum, items) => {
                 return sum + (items.s_payment + (items.p_value * items.s_quantity));
             }, 0);
 
@@ -269,7 +266,7 @@ export class CustomerBill extends Component {
         this.setState({ isLoaded: false });
 
         const ids =
-            this.state.items.reduce(function (ids, items) {
+            this.state.items.reduce((ids, items) => {
                 return ids += ',' + items.s_id;
             }, 0);
 
@@ -288,7 +285,7 @@ export class CustomerBill extends Component {
 
         const root = this;
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', (e) => {
             if (e.keyCode === 27)
                 root.setState({ managingItem: false, cleaningUp: false });
             else if (e.key === 'ArrowUp' || e.key === 'ArrowDown')

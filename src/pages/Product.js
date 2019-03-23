@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import TextField  from '@material-ui/core/TextField';
 import Button     from '@material-ui/core/Button';
@@ -21,7 +22,7 @@ export class Product extends Component {
             isLoaded: false,
             fetching: false,
             toast   : { open: false, message: '' },
-            products: {},
+            products: [],
             product : { id: null, name: '', value: '' },
             selectedRow : undefined
         };
@@ -30,11 +31,23 @@ export class Product extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:3000/api/products?&_sort=name')
+
+        this.setState({ 'products': [] }, () => { this.getProducts(); });
+    }
+
+    getProducts(page) {
+
+        let p = page ? page : 1;
+        fetch(`http://localhost:3000/api/products?_p=${p}&_size=100&_sort=name`)
         .then(res => res.json())
         .then(
             (result) => {
-                this.setState({ isLoaded: true, products: result });
+                if (result.length) {
+                    let products = this.state.products;
+                    products = products.concat(result);
+                    this.setState({ 'products': products }, () => { this.getProducts(++p); });
+                } else
+                    this.setState({ isLoaded: true });
             },
             (error) => {
                 this.setState({ isLoaded: true, error });
@@ -67,7 +80,7 @@ export class Product extends Component {
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products.map(function(product, i) {
+                            {products.map((product, i) => {
                                 return (
                                     <TableRow
                                         onClick ={ e => root.editRowInfo(e) }
@@ -189,9 +202,9 @@ export class Product extends Component {
     saveProduct() {
 
         fetch('http://localhost:3000/api/products/', {
-            method: "POST",
+            method: 'POST',
             body: JSON.stringify(this.state.product),
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json' },
         })
         .then(res => res.json())
         .then(
@@ -278,7 +291,7 @@ export class Product extends Component {
 
         const root = this;
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
                 root.manageSelectedRow(e.key);
             else if (e.key === 'Enter')

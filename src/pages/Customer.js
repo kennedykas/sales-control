@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import TextField            from '@material-ui/core/TextField';
 import Button               from '@material-ui/core/Button';
@@ -19,7 +20,7 @@ export class Customer extends Component {
     componentDidMount() {
         this.setState(
             { client: JSON.parse(localStorage.getItem('client')) },
-            function() {
+            () => {
                 if (this.state.client.id) {
                     fetch(`http://localhost:3000/api/clients/${Number(this.state.client.id)}`)
                     .then(res => res.json())

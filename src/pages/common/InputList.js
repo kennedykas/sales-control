@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component } from 'react';
 import TextField  from '@material-ui/core/TextField';
 
@@ -31,18 +32,11 @@ export class InputList extends Component {
                     fullWidth />
 
                 <datalist id="items">
-                    {this.props.listItems.map(function(object, i){
+                    {this.props.listItems.map((object, i) => {
                         return <option key={ i } value={ object.name } data-key={ object.id } />;
                     })}
                 </datalist>
             </div>
         )
     }
-
-    // setOptionById(id) {
-    //     if (id) {
-    //         const $list = document.getElementById('list');
-    //         $list.value = document.querySelector('#items option[data-key="' + id + '"]').value;
-    //     }
-    // }
 }
