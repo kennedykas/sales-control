@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, { Component }  from 'react';
 import { Route, HashRouter } from "react-router-dom";
 import { Customer }          from './pages/Customer';
@@ -15,7 +16,7 @@ class App extends Component {
 
     addNavigation() {
 
-        document.addEventListener('keypress', function(e) {
+        document.addEventListener('keypress', (e) => {
             if (e.key === '\\') window.location = '#/';
         });
     }
