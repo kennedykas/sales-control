@@ -31,14 +31,12 @@ export class Product extends Component {
     }
 
     componentDidMount() {
-
         this.setState({ 'products': [] }, () => { this.getProducts(); });
     }
 
     getProducts(page) {
-
-        let p = page ? page : 1;
-        fetch(`http://localhost:3000/api/products?_p=${p}&_size=100&_sort=name`)
+        let p = page ? page : 0;
+        fetch(`http://localhost:3001/api/products?_p=${p}&_size=100&_sort=name`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -162,7 +160,6 @@ export class Product extends Component {
     }
 
     editRowInfo(e) {
-
         const id      = e.currentTarget.rowIndex - 1;
         const product = this.state.products[id];
 
@@ -171,7 +168,6 @@ export class Product extends Component {
     }
 
     cantUpdateProduct() {
-
         const toast = this.state.toast;
         toast.open    = true;
         toast.message = '❌ Não é possível atualizar este produto!';
@@ -180,7 +176,6 @@ export class Product extends Component {
     }
 
     setProduct(key, e) {
-
         const product = this.state.product;
         product[key]  = e.target.value.toUpperCase();
         this.setState({ 'product': product });
@@ -191,7 +186,6 @@ export class Product extends Component {
     }
 
     storeData(e) {
-
         if (!document.querySelector('.products__form-fields').checkValidity())
             return false;
 
@@ -200,8 +194,7 @@ export class Product extends Component {
     }
 
     saveProduct() {
-
-        fetch('http://localhost:3000/api/products/', {
+        fetch('http://localhost:3001/api/products/', {
             method: 'POST',
             body: JSON.stringify(this.state.product),
             headers: { 'Content-Type': 'application/json' },
@@ -214,8 +207,7 @@ export class Product extends Component {
     }
 
     updateProduct() {
-
-        fetch('http://localhost:3000/api/products/', {
+        fetch('http://localhost:3001/api/products/', {
             method: "PUT",
             body: JSON.stringify(this.state.product),
             headers: { "Content-Type": "application/json" },
@@ -228,7 +220,6 @@ export class Product extends Component {
     }
 
     handleResult() {
-
         const toast   = this.state.toast;
         toast.open    = true;
         toast.message = '✔️ Salvo com sucesso!';
@@ -249,12 +240,10 @@ export class Product extends Component {
     }
 
     productIsReferenced() {
-
         this.setState({ fetching: true });
-
         const id = this.state.product.id;
 
-        return fetch(`http://localhost:3000/api/sales?_where=(product,like,${id}~)`)
+        return fetch(`http://localhost:3001/api/sales?_where=(product,like,${id}~)`)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -274,8 +263,7 @@ export class Product extends Component {
     }
 
     deleteProduct(id) {
-
-        fetch(`http://localhost:3000/api/products/${id}`, { method: "DELETE" })
+        fetch(`http://localhost:3001/api/products/${id}`, { method: "DELETE" })
         .then(res => res.json())
         .then(
             (result) => {
@@ -288,19 +276,18 @@ export class Product extends Component {
     }
 
     keyboardShortcuts() {
-
         const root = this;
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
-                root.manageSelectedRow(e.key);
-            else if (e.key === 'Enter')
-                root.openRowDetails(e);
+        document.addEventListener('keydown', e => {
+            if (e.srcElement.baseURI.includes('products')) {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
+                    root.manageSelectedRow(e.key);
+                else if (e.key === 'Enter')
+                    root.openRowDetails(e);
+            }
         });
     }
 
     manageSelectedRow(key) {
-
         if (key === 'ArrowUp') {
             if (this.state.selectedRow > 0)
                 this.setState({ selectedRow: this.state.selectedRow - 1 });
@@ -315,7 +302,6 @@ export class Product extends Component {
     }
 
     openRowDetails(e) {
-
         if (!this.state.managingItem && this.state.selectedRow) {
             e.preventDefault();
             document.querySelector('tbody').children[this.state.selectedRow].children[0].click();

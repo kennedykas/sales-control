@@ -24,7 +24,7 @@ export class SearchCustomer extends Component {
     getClients(page) {
 
         let p = page ? page : 1;
-        fetch(`http://localhost:3000/api/clients?_p=${p}&_size=100`)
+        fetch(`http://localhost:3001/api/clients?_p=${p}&_size=100`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -75,7 +75,7 @@ export class SearchCustomer extends Component {
                         </Button>
                     </div>
                     <div>
-                        <NavLink to="/products">
+                        <NavLink to="/products" tabIndex="-1">
                             <Button color="secondary">PRODUTOS</Button>
                         </NavLink>
                         {/* <NavLink to="/customer/new">

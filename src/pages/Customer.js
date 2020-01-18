@@ -22,7 +22,7 @@ export class Customer extends Component {
             { client: JSON.parse(localStorage.getItem('client')) },
             () => {
                 if (this.state.client.id) {
-                    fetch(`http://localhost:3000/api/clients/${Number(this.state.client.id)}`)
+                    fetch(`http://localhost:3001/api/clients/${Number(this.state.client.id)}`)
                     .then(res => res.json())
                     .then(
                         (result) => {
@@ -90,7 +90,7 @@ export class Customer extends Component {
                             onClick={ e => this.storeData(e) }>
                             SALVAR
                         </Button>
-                        <NavLink to="/">
+                        <NavLink to="/" tabIndex="-1">
                             <Button variant="outlined" color="secondary">
                                 CANCELAR
                             </Button>
@@ -122,7 +122,7 @@ export class Customer extends Component {
 
     saveClient() {
 
-        fetch('http://localhost:3000/api/clients/', {
+        fetch('http://localhost:3001/api/clients/', {
             method: "POST",
             body: JSON.stringify(this.state.client),
             headers: { "Content-Type": "application/json" },
@@ -150,7 +150,7 @@ export class Customer extends Component {
 
     updateClient() {
 
-        fetch('http://localhost:3000/api/clients/', {
+        fetch('http://localhost:3001/api/clients/', {
             method: "PUT",
             body: JSON.stringify(this.state.client),
             headers: { "Content-Type": "application/json" },

@@ -56,7 +56,7 @@ export class CustomerBill extends Component {
     getSales(page) {
 
         let p = page ? page : 1;
-        fetch(`http://localhost:3000/api/xjoin?_p=${p}&_size=100&_join=s.sales,_j,p.products&_on1=(s.product,eq,p.id)&_fields=s.id,s.date,s.quantity,s.payment,p.id,p.value,p.name&_where=(s.client,like,${this.state.client.id}~)&_sort=s.date,s.id`)
+        fetch(`http://localhost:3001/api/xjoin?_p=${p}&_size=100&_join=s.sales,_j,p.products&_on1=(s.product,eq,p.id)&_fields=s.id,s.date,s.quantity,s.payment,p.id,p.value,p.name&_where=(s.client,like,${this.state.client.id}~)&_sort=s.date,s.id`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -75,7 +75,7 @@ export class CustomerBill extends Component {
 
     getClient() {
 
-        fetch('http://localhost:3000/api/clients?_sort=-id')
+        fetch('http://localhost:3001/api/clients?_sort=-id')
         .then(res => res.json())
         .then(
             (result) => {
@@ -270,7 +270,7 @@ export class CustomerBill extends Component {
                 return ids += ',' + items.s_id;
             }, 0);
 
-        fetch(`http://localhost:3000/api/sales/bulk?_ids=${ids}`, { method : "DELETE" })
+        fetch(`http://localhost:3001/api/sales/bulk?_ids=${ids}`, { method : "DELETE" })
         .then(res => res.json())
         .then(
             (result) => {

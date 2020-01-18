@@ -26,7 +26,7 @@ export class ItemDialog extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:3000/api/products/')
+        fetch('http://localhost:3001/api/products/')
         .then(res => res.json())
         .then(
             (result) => {
@@ -213,7 +213,7 @@ export class ItemDialog extends Component {
 
     updateSale() {
 
-        fetch('http://localhost:3000/api/sales/', {
+        fetch('http://localhost:3001/api/sales/', {
             method : "PUT",
             body   : JSON.stringify(this.state.item),
             headers: { "Content-Type": "application/json" },
@@ -246,7 +246,7 @@ export class ItemDialog extends Component {
 
     saveSale() {
 
-        fetch('http://localhost:3000/api/sales/', {
+        fetch('http://localhost:3001/api/sales/', {
             method: "POST",
             body: JSON.stringify(this.state.item),
             headers: { "Content-Type": "application/json" },
