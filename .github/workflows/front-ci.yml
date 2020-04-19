@@ -11,13 +11,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -29,3 +26,8 @@ jobs:
     - run: npm test
       env:
         CI: true
+    - uses: actions/upload-artifact@v1
+      with:
+        name: my-artifact
+        path: ./dist
+    
