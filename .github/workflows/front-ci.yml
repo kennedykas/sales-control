@@ -29,5 +29,5 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: my-artifact
-        path: /home/runner/work/sales-control/sales-control/dist
+        path: /home/runner/work/sales-control/sales-control/build
     
