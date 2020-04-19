@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v1steps wait until compile
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
@@ -33,7 +33,7 @@ jobs:
         # Artifact name
         name: ui
         # Directory containing files to upload
-        path: ./dist
+        path: ./dist/static/**
     - run: npm test
       env:
         CI: true
