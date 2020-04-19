@@ -33,7 +33,7 @@ jobs:
         # Artifact name
         name: ui
         # Directory containing files to upload
-        path: dist
+        path: ./dist
     - run: npm test
       env:
         CI: true
