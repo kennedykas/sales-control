@@ -8,18 +8,12 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  watch:
-    types: [started]
-
-
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
     
-    if: github.actor == github.event.repository.owner.login
-
     strategy:
       matrix:
         node-version: [12.x]
