@@ -51,19 +51,16 @@ export class ItemDialog extends Component {
                 )
             }
 
-    componentWillReceiveProps() {
-
-        const item    = this.state.item;
-        item.id       = this.props.item.s_id;
-        item.client   = JSON.parse(localStorage.getItem('client')).id;
-        item.product  = this.props.item.p_id;
-        item.quantity = this.props.item.s_quantity;
-        item.date     = this.getFormatedDate(this.props.item.s_date);
-        item.payment  = this.props.item.s_payment;
-
-        const productName = this.props.item.p_name;
-
-        this.setState({ 'item': item, 'productName': productName });
+    componentWillReceiveProps () {
+        const item = this.state.item
+        item.customer = JSON.parse(localStorage.getItem('client'))._id
+        item.amount = this.props.item.amount
+        item.product = this.props.item.product
+        item.paymentAmount = this.props.item.paymentAmount
+        item._id = this.props.item._id
+        this.setState({ productName: this.props.item._id && this.props.item.product ? this.props.item.product.descrition : '' })
+        this.setState({hiddenButton: this.props.item._id ? true : false})
+        this.setState({ item: item })
     }
 
     getFormatedDate(date) {
