@@ -17,27 +17,30 @@ export class Customer extends Component {
         };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.setState(
             { client: JSON.parse(localStorage.getItem('client')) },
             () => {
-                if (this.state.client.id) {
-                    fetch(`http://localhost:3001/api/clients/${Number(this.state.client.id)}`)
-                    .then(res => res.json())
+                if (this.state.client._id) {
+                    fetch(`http://localhost:3001/api/user?id=${this.state.client._id}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+                    })
+                    .then(res => {
+                        return ManageResponse.checkStatusCode(res)
+                    })
                     .then(
                         (result) => {
-                            this.setState({ isLoaded: true, client: result[0] });
+                            this.setState({ isLoaded: true, client: result })
                         },
-                        (error) => {
-                            this.setState({ isLoaded: true, error });
-                        }
-                    );
+                        () => { this.handleResult() }
+                    )
                 } else {
-                    this.setClient();
-                    this.setState({ isLoaded: true });
+                    this.setClient()
+                    this.setState({ isLoaded: true })
                 }
             }
-        );
+        )
     }
 
     render() {
