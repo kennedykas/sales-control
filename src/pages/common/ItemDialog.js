@@ -283,18 +283,22 @@ export class ItemDialog extends Component {
         )
     }
 
-    saveSale() {
-
-        fetch('http://localhost:3001/api/sales/', {
-            method: "POST",
-            body: JSON.stringify(this.state.item),
-            headers: { "Content-Type": "application/json" },
+    updatePayment () {
+        fetch('http://localhost:3001/api/bills/', {
+            method: 'PUT',
+            body: JSON.stringify({
+                id: this.state.item._id,
+                customer: this.state.item.customer,
+                paymentAmount: this.state.item.paymentAmount
+            }),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => ManageResponse.checkStatusCode(res))
         .then(
-            (result) => { this.handleResult(); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
+    }
     }
 
     closeToast() {
