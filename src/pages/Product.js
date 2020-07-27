@@ -34,24 +34,28 @@ export class Product extends Component {
         this.setState({ 'products': [] }, () => { this.getProducts(); });
     }
 
-    getProducts(page) {
-        let p = page ? page : 0;
-        fetch(`http://localhost:3001/api/products?_p=${p}&_size=100&_sort=name`)
-        .then(res => res.json())
+    getProducts (page) {
+        let p = page ? page : 1
+        fetch(`http://localhost:3001/api/products?page=${p}&limit=10`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
         .then(
-            (result) => {
+            result => {
                 if (result.length) {
-                    let products = this.state.products;
-                    products = products.concat(result);
-                    this.setState({ 'products': products }, () => { this.getProducts(++p); });
-                } else
-                    this.setState({ isLoaded: true });
+                    let products = this.state.products
+                    products = products.concat(result)
+                    this.setState({ products: products }, () => { this.getProducts(++p) })
+                } else {
+                    this.setState({ isLoaded: true })
+                }
             },
-            (error) => {
-                this.setState({ isLoaded: true, error });
+            () => { this.handleResult() }
+        )
             }
-        );
-    }
 
     render() {
         const { error, isLoaded, products} = this.state;
