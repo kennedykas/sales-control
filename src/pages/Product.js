@@ -220,17 +220,19 @@ export class Product extends Component {
         )
     }
 
-    updateProduct() {
+    updateProduct () {
         fetch('http://localhost:3001/api/products/', {
-            method: "PUT",
+            method: 'PUT',
             body: JSON.stringify(this.state.product),
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
         .then(
-            (result) => { this.handleResult(result); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     handleResult() {
