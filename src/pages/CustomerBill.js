@@ -193,10 +193,10 @@ export class CustomerBill extends Component {
         navigator.clipboard.writeText(`http://localhost:3001/#/bill?_id=${this.state.client._id}`)
     }
 
-        const item = {};
-        item.s_quantity = 1;
-
-        this.setState({ 'item': item }, () => this.toggleItemDialog() );
+    closeToast () {
+        const toast = this.state.toast
+        toast.open = false
+        this.setState({ toast: toast })
     }
 
     toggleItemDialog() {
