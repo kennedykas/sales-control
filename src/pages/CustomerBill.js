@@ -301,7 +301,20 @@ export class CustomerBill extends Component {
         }
     }
 
-    unselectRows() {
-        this.setState({ selectedRow: undefined });
+    handleResult (result) {
+        if (result) {
+            this.setState({ isLoaded: true, selectedRow: undefined })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = result.error ? result.error : result.success
+            this.setState({ toast: toast })
+        } else {
+            this.setState({ isLoaded: true, selectedRow: undefined })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = 'Problemas na comunicação.'
+            this.setState({ toast: toast })
+            this.clearState()
+        }
     }
 }
