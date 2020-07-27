@@ -39,6 +39,18 @@ export class CustomerBill extends Component {
 
         this.keyboardShortcuts();
     }
+        const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false,
+            timeZone: 'America/Sao_Paulo'
+        }
+        this.intl = new Intl.DateTimeFormat('pt-BR', options)
+        this.intl2 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
 
     componentDidMount() {
 
