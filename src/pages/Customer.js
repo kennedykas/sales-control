@@ -98,6 +98,17 @@ export class Customer extends Component {
                                 CANCELAR
                             </Button>
                         </NavLink>
+                        {
+                            this.state.client._id ?
+                            <Button
+                            variant = "outlined"
+                            color = "secondary"
+                            type = "submit"
+                            onClick = { e => this.deleteCustomer(e) }>
+                            EXCLUIR
+                            </Button> : ''
+
+                        }
                     </div>
                 </form>
 
