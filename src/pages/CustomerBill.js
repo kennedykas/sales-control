@@ -247,24 +247,21 @@ export class CustomerBill extends Component {
         return total;
     }
 
-    deleteClientItems() {
-
-        this.setState({ isLoaded: false });
-
-        const ids =
-            this.state.items.reduce((ids, items) => {
-                return ids += ',' + items.s_id;
-            }, 0);
-
-        fetch(`http://localhost:3001/api/sales/bulk?_ids=${ids}`, { method : "DELETE" })
-        .then(res => res.json())
+    deleteClientItems () {
+        this.setState({ isLoaded: false })
+        fetch('http://localhost:3001/api/bills/', {
+            method: 'PATCH',
+            body: JSON.stringify({ customer: JSON.parse(localStorage.getItem('client'))._id }),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => ManageResponse.checkStatusCode(res))
         .then(
-            (result) => {
-                this.componentDidMount();
-                this.toggleClearDialog();
+            result => {
+                this.handleResult(result)
+                this.toggleClearDialog()
             },
-            (error) => { this.setState({ isLoaded: true, error }); }
-        );
+            () => { this.handleResult() }
+        )
     }
 
     keyboardShortcuts() {
