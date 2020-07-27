@@ -1,28 +1,35 @@
 /* jshint esversion: 6 */
-import React, { Component } from 'react';
-import TextField     from '@material-ui/core/TextField';
-import Button        from '@material-ui/core/Button';
-import Dialog        from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle   from '@material-ui/core/DialogTitle';
-import Snackbar      from '@material-ui/core/Snackbar';
-import { InputList } from './InputList';
+import React, { Component } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Snackbar from '@material-ui/core/Snackbar'
+import { InputList } from './InputList'
+import ManageResponse from './ManageResponse'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 export class ItemDialog extends Component {
-
-    constructor(props) {
-        super(props);
-
+    constructor (props) {
+        super(props)
         this.state = {
-            item       : {},
-            products   : [],
+            fetching: false,
+            item: {},
+            cleaningUp: false,
+            products: [],
             productName: '',
-            isLoaded   : false,
-            toast      : { open: false, message: '' }
-        };
+            isLoaded: false,
+            toast: { open: false, message: '' },
+            hiddenButton: false
+        }
+        this.baseItem = this.state.item
+    }
 
-        this.baseItem = this.state.item;
+    componentDidMount () {
+        this.getProducts()
     }
 
             getProducts (page) {
@@ -32,8 +39,8 @@ export class ItemDialog extends Component {
                     headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
                 })
                 .then(res => { return ManageResponse.checkStatusCode(res) })
-        .then(
-            (result) => {
+                .then(
+                    (result) => {
                         if (result.length) {
                             result.forEach(product => {
                                 product.name = product.descrition
@@ -46,7 +53,7 @@ export class ItemDialog extends Component {
                             products = products.concat(result)
                             this.setState({ isLoaded: true, fetching: true, products: products })
                         }
-            },
+                    },
                     () => { this.handleResult() }
                 )
             }
@@ -63,66 +70,58 @@ export class ItemDialog extends Component {
         this.setState({ item: item })
     }
 
-    getFormatedDate(date) {
-
-        const d = date ? new Date(date) : new Date();
-
-        return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.toLocaleTimeString()}`;
+    getFormatedDate (date) {
+        const d = date ? new Date(date) : new Date()
+        return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.toLocaleTimeString()}`
     }
 
-    render() {
-        const { error, isLoaded, products} = this.state;
-
-        if (error)
-            return <div>Error: { error.message }</div>;
-
-        else if (!isLoaded)
-            return <div>Carregando...</div>;
-
+    render () {
+        const { error, isLoaded, products } = this.state
+        if (error) return <div>Error: { error.message }</div>
+        //else if (!isLoaded) return <div>Carregando...</div>
         else {
+            let inputs
+            if (this.state.item.amount) {
 
-            let inputs;
-
-            if (this.state.item.quantity) {
                 inputs =
                     <>
                     <InputList
-                        value    ={ this.state.productName }
-                        product  ={ this.state.item.product }
-                        autoFocus={ true }
-                        onChange ={ e => this.handleProductChange(e) }
-                        onClick  ={ () => document.execCommand("selectall", null, false) }
-                        listItems={ products }
-                        required ={ true }
-                        label    ="Produto" />
+                        value = { this.state.productName }
+                        //product = { this.state.item.product }
+                        autoFocus = { true }
+                        onChange = { e => this.handleProductChange(e) }
+                        onClick = { () => document.execCommand('selectall', null, false) }
+                        listItems ={ products }
+                        required = { true }
+                        label = "Produto"/>
 
                     <TextField
-                        value     ={ this.state.item.quantity }
-                        onChange  ={ e => this.handleQuantityChange(e) }
-                        onFocus   ={ e => e.currentTarget.select() }
-                        label     ="Quantidade"
-                        className ="upper"
-                        type      ="number"
-                        inputProps={{ min: '1', step: '1' }}
-                        variant   ="outlined"
-                        style     ={{ 'marginTop': '15px' }}
+                        value = { this.state.item.amount }
+                        onChange = { e => this.handleQuantityChange(e) }
+                        onFocus = { e => e.currentTarget.select() }
+                        label = "Quantidade"
+                        className = "upper"
+                        type = "number"
+                        inputProps = {{ min: '1', step: '1' }}
+                        variant = "outlined"
+                        style = {{ marginTop: '15px' }}
                         required
-                        fullWidth  />
-                    </>;
+                        fullWidth />
+                    </>
             } else {
                 inputs =
                     <TextField
                         autoFocus ={ true }
-                        onFocus   ={ () => document.execCommand("selectall", null, false) }
-                        onChange  ={ e => this.handlePaymentChange(e) }
-                        value     ={ this.state.item.payment || '' }
-                        label     ="Quantia em R$"
-                        className ="upper"
-                        type      ="number"
-                        inputProps={{ step: '0.01' }}
-                        variant   ="outlined"
+                        onFocus = { () => document.execCommand("selectall", null, false) }
+                        onChange = { e => this.handlePaymentChange(e) }
+                        value = { this.state.item.paymentAmount || '' }
+                        label = "Quantia em R$"
+                        className = "upper"
+                        type = "number"
+                        inputProps = {{ step: '0.01' }}
+                        variant = "outlined"
                         required
-                        fullWidth />;
+                        fullWidth />
             }
             return (
                 <>
@@ -140,13 +139,13 @@ export class ItemDialog extends Component {
                         <DialogContent>{ inputs }</DialogContent>
                         <DialogActions>
                             <Button
-                                color  ="primary"
-                                type   ="submit"
-                                onClick={ () => this.storeData() }>
+                                color = "primary"
+                                type = "submit"
+                                onClick = { () => this.storeData() }>
                                 SALVAR
                             </Button>
                             <Button
-                                color  ="secondary"
+                                color = "secondary"
                                 onClick={ () => { this.props.close(); this.clearState(); }}>
                                 CANCELAR
                             </Button>
@@ -160,80 +159,87 @@ export class ItemDialog extends Component {
                         </DialogActions>
                     </form>
                 </Dialog>
+                <Dialog open = { this.state.cleaningUp }>
+                    <DialogTitle>{this.state.item.product ? 'Deletar venda' : 'Cancelar pagamento' }</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                        {this.state.item.product ? 'Deletar esta venda?' : 'Cancelar este pagamento?' }
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick = { () => this.toggleClearDialog() }
+                            color = "secondary" autoFocus={ true }>
+                            CANCELAR
+                        </Button>
+                        <Button onClick = { () => this.deleteSale() } color="primary">
+                            EXCLUIR
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 <Snackbar
-                    anchorOrigin    ={{ vertical: 'top', horizontal: 'right' }}
-                    open            ={ this.state.toast.open }
-                    onClose         ={ () => this.closeToast() }
-                    message         ={ this.state.toast.message }
-                    autoHideDuration={ 3500 } />
+                    anchorOrigin = {{ vertical: 'top', horizontal: 'right' }}
+                    open = { this.state.toast.open }
+                    onClose = { () => this.closeToast() }
+                    message = { this.state.toast.message }
+                    autoHideDuration = { 3500 } />
                 </>
             )
         }
-    };
-
-    handlePaymentChange(e) {
-
-        const item    = this.state.item;
-        const payment = Number(e.target.value.replace(',','.'));
-
-        item.payment = payment > 0 ? (payment * -1) : payment;
-        item.product = 1; // This is a specific product only for payments
-        this.setState({ 'item': item });
     }
 
-    handleProductChange(e) {
+    toggleClearDialog () {
+        this.setState({ cleaningUp: !this.state.cleaningUp })
+        const root = this
+        setTimeout(() => root.setState({ cleaningUp: false }), 5000)
+    }
 
-        const productName   = e.target.value.toUpperCase();
+    handlePaymentChange (e) {
+        const item = this.state.item
+        const paymentAmount = Number(e.target.value.replace(',', '.'))
+        item.paymentAmount = paymentAmount > 0 ? (paymentAmount * -1) : paymentAmount
+        this.setState({ item: item })
+    }
+
+    handleProductChange (e) {
+        const productName = e.target.value.toUpperCase()
         const productOption = productName ?
-            document.querySelector('#items option[value="' + productName + '"]') : null;
-
-        this.setState({ 'productName': productName });
-
+            document.querySelector(`#items option[value="${productName}"]`) : null
+        this.setState({ productName: productName })
         if (productOption) {
-            const item   = this.state.item;
-            item.product = productOption.dataset.key;
-
-            this.setState({ 'item': item });
+            const item = this.state.item
+            item.product = productOption.dataset.key
+            this.setState({ item: item })
         }
     }
 
-    handleQuantityChange(e) {
-
-        if (!Number(e.target.value)) return;
-
-        const item    = this.state.item;
-        item.quantity = Number(e.target.value);
-
-        this.setState({ 'item': item });
+    handleQuantityChange (e) {
+        if (!Number(e.target.value)) return
+        const item = this.state.item
+        item.amount = Number(e.target.value)
+        this.setState({ item: item })
     }
 
-    storeData() {
-
-        if (!document.querySelector('.item__form-fields').checkValidity())
-            return false;
-
-        if (this.productNullOrHasSameIdAndDiferentNames()) {
-                this.cantFindProduct();
-                return false;
+    storeData () {
+        if (!document.querySelector('.item__form-fields').checkValidity()) return false
+        if (this.productNullOrHasSameIdAndDiferentNames() && !this.state.item.paymentAmount) {
+            this.cantFindProduct()
+                return false
         }
-
-        this.state.item.id ? this.updateSale() : this.saveSale();
+        this.state.item._id && this.state.item.product ? this.updateSale() : this.state.item._id ? this.updatePayment() : this.saveSale()
     }
 
-    productNullOrHasSameIdAndDiferentNames() {
-
+    productNullOrHasSameIdAndDiferentNames () {
         return !this.state.item.product ||
-               (this.state.item.product === this.props.item.p_id &&
-                this.state.productName !== this.props.item.p_name)
+               (this.state.item.product === this.props.item._id &&
+                this.state.productName !== this.props.item.descrition)
     }
 
-    cantFindProduct() {
-
-        const toast   = this.state.toast;
-        toast.open    = true;
-        toast.message = '❌ Produto não cadastrado!';
-
-        this.setState({ 'toast': toast });
+    cantFindProduct () {
+        const toast = this.state.toast
+        toast.open = true
+        toast.message = '❌ Produto não     !'
+        this.setState({ toast: toast })
     }
 
     deleteSale () {
@@ -250,19 +256,17 @@ export class ItemDialog extends Component {
         )
     }
 
-    handleResult() {
-        const toast   = this.state.toast;
-        toast.open    = true;
-        toast.message = '✔️ Salvo com sucesso!';
-
-        const root = this;
-
-        this.setState({ 'toast': toast }, () => {
-            root.props.close();
-            root.props.refresh();
-        });
-
-        this.clearState();
+    saveSale () {
+        fetch('http://localhost:3001/api/bills/', {
+            method: 'POST',
+            body: JSON.stringify(this.state.item),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => ManageResponse.checkStatusCode(res))
+        .then(
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     updateSale () {
@@ -327,9 +331,9 @@ export class ItemDialog extends Component {
         this.setState({ item: this.baseItem, productName: '', products: [] })
     }
 
-    closeToast() {
-        const toast = this.state.toast;
-        toast.open  = false;
-        this.setState({ 'toast': toast });
+    closeToast () {
+        const toast = this.state.toast
+        toast.open = false
+        this.setState({ toast: toast })
     }
 }
