@@ -120,7 +120,15 @@ export class Product extends Component {
                         inputProps={{ min: '0.01', step: '0.01' }}
                         required />
 
-                    <div className="actions">
+                    <TextField
+                        label = "Código"
+                        className = "upper"
+                        variant = "outlined"
+                        value ={ this.state.product.code }
+                        onChange = { e => this.setProduct('code', e) }
+                        inputProps = {{ pattern: '.{3,}' }}
+                    />
+
                         <Button
                             variant ="outlined"
                             color   ="secondary"
