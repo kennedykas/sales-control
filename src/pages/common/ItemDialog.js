@@ -265,8 +265,22 @@ export class ItemDialog extends Component {
         this.clearState();
     }
 
-    clearState() {
-        this.setState({ item: this.baseItem, productName: '' });
+    updateSale () {
+        fetch('http://localhost:3001/api/bills/', {
+            method: 'PUT',
+            body: JSON.stringify({
+                id: this.state.item._id,
+                customer: this.state.item.customer,
+                product: this.state.item.product,
+                amount: this.state.item.amount
+            }),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => ManageResponse.checkStatusCode(res))
+        .then(
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     saveSale() {
