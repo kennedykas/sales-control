@@ -145,6 +145,12 @@ export class CustomerBill extends Component {
                         <Clear />
                         LIMPAR
                     </Button>
+                            <Button
+                                className = 'copyButton'
+                                onClick = { () => this.copyUrl() }
+                                tabIndex = '-1'>
+                                    <FileCopyOutlinedIcon/>
+                            </Button>
                 </div>
 
                 <ItemDialog
