@@ -127,7 +127,15 @@ export class ItemDialog extends Component {
             return (
                 <>
                 <Dialog open={ this.props.open }>
-                    <DialogTitle>{ this.state.item.id ? 'Editar' : 'Adicionar' }</DialogTitle>
+                    <DialogTitle>
+                        { this.state.item._id ? 'Editar' : 'Adicionar' }
+                        {
+                            this.state.fetching ?
+                            '' :
+                            <CircularProgress
+                            style={{ margin: '0 0', position: 'absolute', color: '#f50057' }} size={20} />
+                        }
+                    </DialogTitle>
                     <form className="item__form-fields">
                         <DialogContent>{ inputs }</DialogContent>
                         <DialogActions>
