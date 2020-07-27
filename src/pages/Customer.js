@@ -120,7 +120,19 @@ export class Customer extends Component {
         if (!document.querySelector('.customer__form-fields').checkValidity())
             return false;
 
-        this.state.client.id ? this.updateClient() : this.saveClient();
+    deleteCustomer (e) {
+        fetch('http://localhost:3001/api/user/', {
+            method: 'DELETE',
+            body: JSON.stringify(this.state.client),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
+        .then(
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     saveClient() {
