@@ -1,44 +1,35 @@
 /* jshint esversion: 6 */
-import React, { Component } from 'react';
-import Button            from '@material-ui/core/Button';
-import Table             from '@material-ui/core/Table';
-import TableBody         from '@material-ui/core/TableBody';
-import TableCell         from '@material-ui/core/TableCell';
-import TableHead         from '@material-ui/core/TableHead';
-import TableRow          from '@material-ui/core/TableRow';
-import Paper             from '@material-ui/core/Paper';
-import MoneyOffIcon      from '@material-ui/icons/MoneyOff';
-import AddIcon           from '@material-ui/icons/Add';
-import Clear             from '@material-ui/icons/Clear';
-import Dialog            from '@material-ui/core/Dialog';
-import DialogActions     from '@material-ui/core/DialogActions';
-import DialogContent     from '@material-ui/core/DialogContent';
-import DialogTitle       from '@material-ui/core/DialogTitle';
-import { ItemDialog }    from './common/ItemDialog';
-import DialogContentText from '@material-ui/core/DialogContentText';
-
+import React, { Component } from 'react'
+import Button from '@material-ui/core/Button'
+import MoneyOffIcon from '@material-ui/icons/MoneyOff'
+import AddIcon from '@material-ui/icons/Add'
+import Snackbar from '@material-ui/core/Snackbar'
+import Clear from '@material-ui/icons/Clear'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import { ItemDialog } from './common/ItemDialog'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import ManageResponse from './common/ManageResponse'
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { InvoiceTable } from '../pages/common/InvoiceTable'
 export class CustomerBill extends Component {
-
-    constructor(props) {
-        super(props);
+    constructor (props) {
+        super(props)
         this.state = {
-            client      : { id: null, name: '', phone: '', email: '', 'register-date': '' },
+            client: { _id: null, name: '', phone: '', email: '', createAt: '' },
             managingItem: false,
-            paying      : false,
-            cleaningUp  : false,
-            total       : 0,
-            items       : [],
-            item        : {},
-            selectedRow : undefined
-        };
-
-        this.toggleItemDialog  = this.toggleItemDialog.bind(this);
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.intl  = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 });
-        this.intl2 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-
-        this.keyboardShortcuts();
-    }
+            paying: false,
+            cleaningUp: false,
+            total: 0,
+            items: [],
+            item: {},
+            selectedRow: undefined,
+            toast: { open: false, message: '' }
+        }
+        this.toggleItemDialog = this.toggleItemDialog.bind(this)
+        this.componentDidMount = this.componentDidMount.bind(this)
         const options = {
             year: 'numeric',
             month: 'numeric',
@@ -51,18 +42,19 @@ export class CustomerBill extends Component {
         }
         this.intl = new Intl.DateTimeFormat('pt-BR', options)
         this.intl2 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+        this.keyboardShortcuts()
+        this.unselectRows()
+    }
 
-    componentDidMount() {
-
+    componentDidMount () {
+        this.unselectRows()
         this.setState(
-            { 'client': JSON.parse(localStorage.getItem('client')), 'items': [] },
+            { client: JSON.parse(localStorage.getItem('client')), items: [] },
             () => {
-                if (this.state.client && this.state.client.id)
-                    this.getSales();
-                else
-                    this.getClient();
+                if (this.state.client && this.state.client._id) this.getSales()
+                else this.getClient()
             }
-        );
+        )
     }
 
     getSales (page) {
@@ -85,106 +77,100 @@ export class CustomerBill extends Component {
             },
             () => { this.handleResult() }
         )
-            }
+    }
 
-    getClient() {
-
+    getClient () {
         fetch('http://localhost:3001/api/clients?_sort=-id')
         .then(res => res.json())
         .then(
             (result) => {
                 this.setState({ client: result[0] }, () => {
-                    localStorage.setItem('client', JSON.stringify(result[0]));
-                });
-                this.getSales();
+                    localStorage.setItem('client', JSON.stringify(result[0]))
+                })
+                this.getSales()
             },
-            (error)  => { this.setState({ error }); }
-        );
+            (error) => { this.setState({ error }) }
+        )
     }
 
-    render() {
-        let root = this;
-        const { error, isLoaded, items} = this.state;
-
-        if (error)
-            return <div>Error: { error.message }</div>;
-
-        else if (!isLoaded)
-            return <div>Carregando...</div>;
-
+    render () {
+        const { error, isLoaded } = this.state
+        if (error) this.componentDidMount()
+        else if (!isLoaded) return <div>Carregando...</div>
         else {
             return (
-            <>
-            <section className="customer-bill">
+                <>
+                    <section className="customer-bill">
                         <InvoiceTable
                             root = {this}
                             items = {this.state.items}
                             client = {this.state.client}
                             onClickRow = { e => this.editRowInfo(e) }>
                         </InvoiceTable>
-                    <Button
-                        variant="outlined"
-                        color  ="primary"
-                        onFocus={ () => this.unselectRows() }
-                        onClick={ () => this.showNewItemDialog() }>
-                        <AddIcon />
-                        ADICIONAR ITENS
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color  ="primary"
-                        onClick={ () => this.showNewPaymentDialog() }>
-                        <MoneyOffIcon />
-                        PAGAR
-                    </Button>
-                    <Button
-                        variant ="outlined"
-                        color   ="secondary"
-                        disabled={ !this.state.items.length }
-                        onClick ={ () => this.toggleClearDialog() }>
-                        <Clear />
-                        LIMPAR
-                    </Button>
+                        <div className = "customer-bill__actions">
+                            <Button
+                                variant = "outlined"
+                                color = "primary"
+                                onFocus = { () => this.unselectRows() }
+                                onClick = { () => this.showNewItemDialog() }>
+                                <AddIcon />
+                                ADICIONAR ITENS
+                            </Button>
+                            <Button
+                                variant = "outlined"
+                                color = "primary"
+                                onClick = { () => this.showNewPaymentDialog() }>
+                                <MoneyOffIcon />
+                                PAGAR
+                            </Button>
+                            <Button
+                                variant = "outlined"
+                                color = "secondary"
+                                disabled = { !this.state.items.length }
+                                onClick = { () => this.toggleClearDialog() }>
+                                <Clear />
+                                LIMPAR
+                            </Button>
                             <Button
                                 className = 'copyButton'
                                 onClick = { () => this.copyUrl() }
                                 tabIndex = '-1'>
                                     <FileCopyOutlinedIcon/>
                             </Button>
-                </div>
+                        </div>
 
-                <ItemDialog
-                    refresh={ this.componentDidMount }
-                    open   ={ this.state.managingItem }
-                    close  ={ this.toggleItemDialog }
-                    item   ={ this.state.item } />
+                        <ItemDialog
+                            refresh = { this.componentDidMount }
+                            open = { this.state.managingItem }
+                            close = { this.toggleItemDialog }
+                            item = { this.state.item } />
 
-                <Dialog open={ this.state.cleaningUp }>
-                    <DialogTitle>Limpar itens</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Limpar todos os registros de pagamentos e produtos deste cliente?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            onClick={ () => this.toggleClearDialog() }
-                            color="secondary" autoFocus={ true }>
-                            CANCELAR
-                        </Button>
-                        <Button onClick={ () => this.deleteClientItems() } color="primary">
-                            LIMPAR
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </section>
+                        <Dialog open = { this.state.cleaningUp }>
+                            <DialogTitle>Limpar itens</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Limpar todos os registros de pagamentos e produtos deste cliente?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick = { () => this.toggleClearDialog() }
+                                    color = "secondary" autoFocus={ true }>
+                                    CANCELAR
+                                </Button>
+                                <Button onClick = { () => this.deleteClientItems() } color="primary">
+                                    LIMPAR
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </section>
                     <Snackbar
                         anchorOrigin = {{ vertical: 'top', horizontal: 'right' }}
                         open = { this.state.toast.open }
                         onClose = { () => this.closeToast() }
                         message = { this.state.toast.message }
                         autoHideDuration = { 3500 } />
-            </>
+                </>
             )
         }
     }
@@ -199,52 +185,30 @@ export class CustomerBill extends Component {
         this.setState({ toast: toast })
     }
 
-    toggleItemDialog() {
-        this.setState({ managingItem: !this.state.managingItem });
+    showNewItemDialog () {
+        const item = {}
+        item.amount = 1
+        this.setState({ item: item }, () => this.toggleItemDialog())
     }
 
-    showNewPaymentDialog() {
-        this.setState({ item: {} }, () => this.toggleItemDialog() );
+    toggleItemDialog () {
+        this.setState({ managingItem: !this.state.managingItem })
     }
 
-    toggleClearDialog() {
-
-        this.setState({ cleaningUp: !this.state.cleaningUp });
-
-        let root = this;
-
-        setTimeout(() => root.setState({ cleaningUp: false }), 5000);
-    };
-
-    editRowInfo(e) {
-
-        const id   = e.currentTarget.rowIndex - 1;
-        const item = this.state.items[id];
-
-        this.setState({ 'item': item }, () => this.toggleItemDialog());
+    showNewPaymentDialog () {
+        this.setState({ item: {} }, () => this.toggleItemDialog())
     }
 
-    clientStatus() {
-
-        const total = this.getTotal();
-        let message;
-
-        if (total < 0)
-            message = ` - Nós te devemos ${this.intl2.format(total * -1)}`;
-        else if (total > 0)
-            message = ` - Total: ${this.intl2.format(total)}`;
-
-        return message;
+    toggleClearDialog () {
+        this.setState({ cleaningUp: !this.state.cleaningUp })
+        const root = this
+        setTimeout(() => root.setState({ cleaningUp: false }), 5000)
     }
 
-    getTotal() {
-
-        const total =
-            this.state.items.reduce((sum, items) => {
-                return sum + (items.s_payment + (items.p_value * items.s_quantity));
-            }, 0);
-
-        return total;
+    editRowInfo (e) {
+        const id = e.currentTarget.rowIndex - 1
+        const item = this.state.items[id]
+        this.setState({ item: item }, () => this.toggleItemDialog())
     }
 
     deleteClientItems () {
@@ -264,41 +228,37 @@ export class CustomerBill extends Component {
         )
     }
 
-    keyboardShortcuts() {
-
-        const root = this;
-
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 27)
-                root.setState({ managingItem: false, cleaningUp: false });
-            else if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
-                root.manageSelectedRow(e.key);
-            else if (e.key === 'Enter')
-                root.openRowDetails(e);
-        });
+    keyboardShortcuts () {
+        const root = this
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') root.setState({ managingItem: false, cleaningUp: false })
+                else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') root.manageSelectedRow(e.key)
+                else if (e.key === 'Enter') root.openRowDetails(e)
+            })
     }
 
-    manageSelectedRow(key) {
-
+    manageSelectedRow (key) {
         if (key === 'ArrowUp') {
-            if (this.state.selectedRow > 0)
-                this.setState({ selectedRow: this.state.selectedRow - 1 });
-
+            if (this.state.selectedRow > 0) this.setState({ selectedRow: this.state.selectedRow - 1 })
         } else if (this.state.selectedRow === undefined) {
-            this.setState({ selectedRow: 0 });
-
+            this.setState({ selectedRow: 0 })
         } else {
-            if (this.state.selectedRow < (this.state.items.length - 1))
-                this.setState({ selectedRow: this.state.selectedRow + 1 });
+            if (this.state.selectedRow < (this.state.items.length - 1)) this.setState({ selectedRow: this.state.selectedRow + 1 })
         }
     }
 
-    openRowDetails(e) {
+    openRowDetails (e) {
+            if (!this.state.managingItem && this.state.selectedRow >= 0) {
+                e.preventDefault()
+                const tbody = document.querySelector('tbody')
+                if (tbody) {
+                    tbody.children[this.state.selectedRow].children[0].click()
+                }
+            }
+    }
 
-        if (!this.state.managingItem && this.state.selectedRow >= 0) {
-            e.preventDefault();
-            document.querySelector('tbody').children[this.state.selectedRow].children[0].click();
-        }
+    unselectRows () {
+        this.setState({ selectedRow: undefined })
     }
 
     handleResult (result) {
