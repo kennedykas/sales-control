@@ -178,6 +178,12 @@ export class CustomerBill extends Component {
                     </DialogActions>
                 </Dialog>
             </section>
+                    <Snackbar
+                        anchorOrigin = {{ vertical: 'top', horizontal: 'right' }}
+                        open = { this.state.toast.open }
+                        onClose = { () => this.closeToast() }
+                        message = { this.state.toast.message }
+                        autoHideDuration = { 3500 } />
             </>
             )
         }
