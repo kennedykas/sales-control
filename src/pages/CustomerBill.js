@@ -116,54 +116,12 @@ export class CustomerBill extends Component {
             return (
             <>
             <section className="customer-bill">
-                <header>
-                    <h2>{ this.state.client.name } { this.clientStatus() }</h2>
-                    <strong>*Importante, o valor dos produtos está sujeito a reajustes sem aviso prévio.</strong>
-                </header>
-
-                <section className="customer-bill__items">
-
-                    <h2 hidden={this.state.items.length} className="empty">
-                        Nada encontrado.
-                    </h2>
-
-                    <Paper hidden={ !this.state.items.length }>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell numeric>Quantidade</TableCell>
-                                    <TableCell>Produto</TableCell>
-                                    <TableCell>Data</TableCell>
-                                    <TableCell numeric>Unitário (R$)</TableCell>
-                                    <TableCell numeric>Total (R$)</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                            { items.map((item, i) => { return (
-                                <TableRow
-                                    onClick ={ e => root.editRowInfo(e) }
-                                    selected={ root.state.selectedRow === i }
-                                    hover   ={ true }
-                                    key     ={ i }>
-                                    <TableCell numeric>{ item.s_quantity }</TableCell>
-                                    <TableCell>{ item.p_name }</TableCell>
-                                    <TableCell>{ new Date(item.s_date).toLocaleString() }</TableCell>
-                                    <TableCell numeric>
-                                        { item.p_value ? root.intl.format(item.p_value) : '' }
-                                    </TableCell>
-                                    <TableCell numeric>
-                                        { item.p_value ?
-                                            root.intl.format(item.s_quantity * item.p_value) :
-                                            root.intl.format(item.s_payment) }
-                                    </TableCell>
-                                </TableRow>
-                            );})}
-                            </TableBody>
-                        </Table>
-                    </Paper>
-                </section>
-
-                <div className="customer-bill__actions">
+                        <InvoiceTable
+                            root = {this}
+                            items = {this.state.items}
+                            client = {this.state.client}
+                            onClickRow = { e => this.editRowInfo(e) }>
+                        </InvoiceTable>
                     <Button
                         variant="outlined"
                         color  ="primary"
