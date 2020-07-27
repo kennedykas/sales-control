@@ -283,17 +283,18 @@ export class Product extends Component {
             );
     }
 
-    deleteProduct(id) {
-        fetch(`http://localhost:3001/api/products/${id}`, { method: "DELETE" })
-        .then(res => res.json())
+    deleteProduct () {
+        fetch('http://localhost:3001/api/products', {
+            method: 'DELETE',
+            body: JSON.stringify(this.state.product),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        }).then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
         .then(
-            (result) => {
-                this.setState({ fetching: false });
-                this.componentDidMount();
-                this.clearState();
-            },
-            (error) => { this.setState({ fetching: false, error }) }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     keyboardShortcuts() {
