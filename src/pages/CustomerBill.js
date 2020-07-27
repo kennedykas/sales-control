@@ -65,25 +65,27 @@ export class CustomerBill extends Component {
         );
     }
 
-    getSales(page) {
-
-        let p = page ? page : 1;
-        fetch(`http://localhost:3001/api/xjoin?_p=${p}&_size=100&_join=s.sales,_j,p.products&_on1=(s.product,eq,p.id)&_fields=s.id,s.date,s.quantity,s.payment,p.id,p.value,p.name&_where=(s.client,like,${this.state.client.id}~)&_sort=s.date,s.id`)
-        .then(res => res.json())
+    getSales (page) {
+        let p = page ? page : 1
+        const myHeaders = new Headers()
+        myHeaders.append('Authorization', sessionStorage.getItem('authToken'))
+        myHeaders.append('Content-Type', 'application/json')
+        fetch(`http://localhost:3001/api/bills?userId=${this.state.client._id}&page=${p}&limit=15`, {
+            method: 'GET',
+            headers: myHeaders
+        })
+        .then(res => ManageResponse.checkStatusCode(res))
         .then(
             (result) => {
                 if (result.length) {
-                    let items = this.state.items;
-                    items = items.concat(result);
-                    this.setState({ 'items': items }, () => { this.getSales(++p); });
-                } else
-                    this.setState({ isLoaded: true });
+                    let items = this.state.items
+                    items = items.concat(result)
+                    this.setState({ items: items }, () => { this.getSales(++p) })
+                } else this.setState({ isLoaded: true })
             },
-            (error) => {
-                this.setState({ isLoaded: true, error });
+            () => { this.handleResult() }
+        )
             }
-        );
-    }
 
     getClient() {
 
