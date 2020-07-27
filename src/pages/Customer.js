@@ -170,18 +170,17 @@ export class Customer extends Component {
         }
     }
 
-    updateClient() {
-
-        fetch('http://localhost:3001/api/clients/', {
-            method: "PUT",
+    updateClient () {
+        fetch('http://localhost:3001/api/user/', {
+            method: 'PUT',
             body: JSON.stringify(this.state.client),
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => { return ManageResponse.checkStatusCode(res) })
         .then(
-            (result) => { this.handleResult('/'); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     setClient(key, value) {
