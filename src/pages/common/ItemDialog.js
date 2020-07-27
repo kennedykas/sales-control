@@ -299,6 +299,32 @@ export class ItemDialog extends Component {
             () => { this.handleResult() }
         )
     }
+
+    handleResult (result) {
+        if (result) {
+            const root = this
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = result.error ? result.error : result.success
+            this.setState({ toast: toast }, () => {
+                root.props.close()
+                root.props.refresh()
+            })
+            this.clearState()
+            //this.componentDidMount()
+        } else {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = 'Problemas na comunicação.'
+            this.setState({ toast: toast })
+            this.clearState()
+        }
+    }
+
+    clearState () {
+        this.setState({ item: this.baseItem, productName: '', products: [] })
     }
 
     closeToast() {
