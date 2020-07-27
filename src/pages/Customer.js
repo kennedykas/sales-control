@@ -183,18 +183,9 @@ export class Customer extends Component {
         )
     }
 
-    setClient(key, value) {
-
-        const client = this.state.client;
-
-        if (key)
-            client[key]  = value.toUpperCase();
-
-        client['register-date'] =
-            client['register-date'] ?
-            client['register-date'].slice(0, 10) :
-            new Date().toISOString().slice(0, 10);
-
-        this.setState({ 'client': client });
+    setClient (key, value) {
+        const client = this.state.client
+        if (key) client[key] = value.toUpperCase()
+        this.setState({ client: client })
     }
 }
