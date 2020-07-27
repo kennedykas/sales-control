@@ -182,4 +182,22 @@ header strong {
   width: fit-content;
 }
 
+.login {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  background-color: 0;
+}
+.login .login-fields {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 24vh;
+}
+.login .login-fields button {
+  margin: 0 auto;
+}
+
 /*# sourceMappingURL=index.css.map */

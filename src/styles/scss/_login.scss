@@ -1,0 +1,20 @@
+.login {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    background-color: blue($color: #000000);
+
+    .login-fields{
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 24vh;
+
+        button {
+            margin: 0 auto;
+        }
+    }
+
+}
