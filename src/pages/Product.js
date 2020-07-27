@@ -235,18 +235,23 @@ export class Product extends Component {
         )
     }
 
-    handleResult() {
-        const toast   = this.state.toast;
-        toast.open    = true;
-        toast.message = '✔️ Salvo com sucesso!';
-
-        this.setState({ 'toast': toast });
-        this.clearState();
-        this.componentDidMount();
+    handleResult (result) {
+        if (result) {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = result.error ? result.error : result.success
+            this.setState({ toast: toast })
+            this.componentDidMount()
+            this.clearState()
+        } else {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = 'Problemas na comunicação.'
+            this.setState({ toast: toast })
+            this.clearState()
     }
-
-    clearState() {
-        this.setState({ 'product': { id: null, name: '', value: '' } });
     }
 
     closeToast() {
