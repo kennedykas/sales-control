@@ -150,6 +150,13 @@ export class ItemDialog extends Component {
                                 onClick={ () => { this.props.close(); this.clearState(); }}>
                                 CANCELAR
                             </Button>
+                            {this.state.hiddenButton ?
+                                <Button
+                                    color = "secondary"
+                                    onClick={ () => { this.toggleClearDialog() }}>
+                                    EXCLUIR
+                                </Button> : ''
+                            }
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -229,18 +236,18 @@ export class ItemDialog extends Component {
         this.setState({ 'toast': toast });
     }
 
-    updateSale() {
-
-        fetch('http://localhost:3001/api/sales/', {
-            method : "PUT",
-            body   : JSON.stringify(this.state.item),
-            headers: { "Content-Type": "application/json" },
+    deleteSale () {
+        this.toggleClearDialog()
+        fetch('http://localhost:3001/api/bills/', {
+            method: 'DELETE',
+            body: JSON.stringify({ id: this.state.item._id }),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => ManageResponse.checkStatusCode(res))
         .then(
-            (result) => { this.handleResult(); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
     handleResult() {
