@@ -1,20 +1,20 @@
 /* jshint esversion: 6 */
-import React, { Component } from 'react';
-import TextField            from '@material-ui/core/TextField';
-import Button               from '@material-ui/core/Button';
-import Snackbar             from '@material-ui/core/Snackbar';
-import NavLink              from 'react-router-dom/NavLink';
-import PersonAdd            from '@material-ui/icons/PersonAdd';
+import React, { Component } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
+import NavLink from 'react-router-dom/NavLink'
+import PersonAdd from '@material-ui/icons/PersonAdd'
+import ManageResponse from './common/ManageResponse'
 
 export class Customer extends Component {
-
-    constructor(props) {
-        super(props);
+    constructor (props) {
+        super(props)
         this.state = {
-            client  : { id: null, name: '', phone: '', email: '', 'register-date': '' },
+            client: { _id: null, name: '', phone: '', email: '', createdAt: '' },
             isLoaded: false,
-            toast   : { open: false, message: '' }
-        };
+            toast: { open: false, message: '' }
+        }
     }
 
     componentDidMount () {
@@ -43,54 +43,48 @@ export class Customer extends Component {
         )
     }
 
-    render() {
-        const { error, isLoaded, client} = this.state;
-
-        if (error)
-            return <div>Error: { error.message }</div>;
-
-        else if (!isLoaded)
-            return <div>Carregando...</div>;
-
+    render () {
+        const { error, isLoaded, client } = this.state
+        if (error) return <div>Error: { error.message }</div>
+        else if (!isLoaded) return <div>Carregando...</div>
         else {
             return (
             <section className="customer">
-
                 <header><h2><PersonAdd /> Cliente</h2></header>
 
                 <form className="customer__form-fields">
                     <TextField
-                        id        ="client-name"
+                        id ="client-name"
                         className ="upper"
-                        label     ="Nome Completo"
-                        variant   ="outlined"
-                        inputProps={{ pattern: '.{3,}' }}
-                        autoFocus ={ client.name === '' }
-                        value     ={ client.name }
-                        onChange  ={ e => this.setClient('name', e.target.value) }
+                        label ="Nome Completo"
+                        variant = "outlined"
+                        inputProps = {{ pattern: '.{3,}' }}
+                        autoFocus = { client.name === '' }
+                        value = { this.state.client.name }
+                        onChange = { e => this.setClient('name', e.target.value) }
                         required />
 
                     <TextField
-                        type     ="number"
-                        label    ="Celular"
-                        variant  ="outlined"
-                        autoFocus={ client.name !== '' }
-                        value    ={ client.phone }
-                        onChange ={ e => this.setClient('phone', e.target.value) } />
+                        type ="number"
+                        label = "Celular"
+                        variant = "outlined"
+                        autoFocus = { client.name !== '' }
+                        value = { this.state.client.phone }
+                        onChange = { e => this.setClient('phone', e.target.value) } />
 
                     <TextField
-                        type    ="email"
-                        label   ="E-mail"
-                        variant ="outlined"
-                        value   ={ client.email }
-                        onChange={ e => this.setClient('email', e.target.value) } />
+                        type = "email"
+                        label = "E-mail"
+                        variant = "outlined"
+                        value = { client.email }
+                        onChange = { e => this.setClient('email', e.target.value) } />
 
-                    <div className="actions">
+                    <div className = "actions">
                         <Button
-                            variant="outlined"
-                            color  ="primary"
-                            type   ="submit"
-                            onClick={ e => this.storeData(e) }>
+                            variant = "outlined"
+                            color = "primary"
+                            type = "submit"
+                            onClick = { e => this.storeData(e) }>
                             SALVAR
                         </Button>
                         <NavLink to="/" tabIndex="-1">
@@ -113,23 +107,21 @@ export class Customer extends Component {
                 </form>
 
                 <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open        ={ this.state.toast.open }
-                    message     ={ this.state.toast.message }
-                    autoHideDuration={ 3500 } />
+                    anchorOrigin = {{ vertical: 'top', horizontal: 'right' }}
+                    open = { this.state.toast.open }
+                    message = { this.state.toast.message }
+                    autoHideDuration = { 3500 } />
             </section>
             )
         }
     }
 
-    storeData(e) {
-
-        e.preventDefault();
-
-        localStorage.setItem('client', JSON.stringify(this.state.client));
-
-        if (!document.querySelector('.customer__form-fields').checkValidity())
-            return false;
+    storeData (e) {
+        e.preventDefault()
+        localStorage.setItem('client', JSON.stringify(this.state.client))
+        if (!document.querySelector('.customer__form-fields').checkValidity()) return false
+        this.state.client._id ? this.updateClient() : this.saveClient()
+    }
 
     deleteCustomer (e) {
         fetch('http://localhost:3001/api/user/', {
@@ -168,7 +160,7 @@ export class Customer extends Component {
             toast.open = true
             toast.message = result.error ? result.error : result.success
             this.setState({ toast: toast }, () => {
-            setTimeout(() => {
+                setTimeout(() => {
                     this.props.history.push('/')
                 }, 500)
             })
