@@ -30,6 +30,8 @@ class App extends Component {
                     <Route path="/products" component={Product} />
                     <Route path="/customer/details" component={CustomerBill} />
                     <Route path="/reports" component={Reports} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/bill" component={ClientSideCustumerBill} />
                 </div>
             </HashRouter>
         )
