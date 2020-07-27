@@ -189,7 +189,9 @@ export class CustomerBill extends Component {
         }
     }
 
-    showNewItemDialog() {
+    copyUrl () {
+        navigator.clipboard.writeText(`http://localhost:3001/#/bill?_id=${this.state.client._id}`)
+    }
 
         const item = {};
         item.s_quantity = 1;
