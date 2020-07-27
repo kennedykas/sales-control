@@ -150,18 +150,24 @@ export class Customer extends Component {
         )
     }
 
-    handleResult(page) {
-
-        const root = this;
-        const toast   = this.state.toast;
-        toast.open    = true;
-        toast.message = '✔️ Salvo com sucesso!';
-
-        this.setState({ 'toast': toast }, () => {
+    handleResult (result) {
+        if (result) {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = result.error ? result.error : result.success
+            this.setState({ toast: toast }, () => {
             setTimeout(() => {
-                root.props.history.push(page);
-            }, 1000);
-        });
+                    this.props.history.push('/')
+                }, 500)
+            })
+        } else {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = 'Problemas na comunicação.'
+            this.setState({ toast: toast })
+        }
     }
 
     updateClient() {
