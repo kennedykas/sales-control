@@ -25,18 +25,31 @@ export class ItemDialog extends Component {
         this.baseItem = this.state.item;
     }
 
-    componentDidMount() {
-        fetch('http://localhost:3001/api/products/')
-        .then(res => res.json())
+            getProducts (page) {
+                let p = page ? page : 1
+                fetch(`http://localhost:3001/api/products?page=${p}&limit=5`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+                })
+                .then(res => { return ManageResponse.checkStatusCode(res) })
         .then(
             (result) => {
-                this.setState({ isLoaded: true, products: result });
+                        if (result.length) {
+                            result.forEach(product => {
+                                product.name = product.descrition
+                            })
+                            let products = this.state.products
+                            products = products.concat(result)
+                            this.setState({ products: products }, () => { this.getProducts(++p) })
+                        } else {
+                            let products = this.state.products
+                            products = products.concat(result)
+                            this.setState({ isLoaded: true, fetching: true, products: products })
+                        }
             },
-            (error) => {
-                this.setState({ isLoaded: true, error });
+                    () => { this.handleResult() }
+                )
             }
-        );
-    }
 
     componentWillReceiveProps() {
 
