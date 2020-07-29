@@ -121,37 +121,89 @@ header strong {
   margin-top: 20vh;
 }
 
-.customer-bill {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  padding-bottom: 100px;
-}
-.customer-bill__actions {
-  position: fixed;
-  top: 235px;
-  right: 9vw;
-  width: 181px;
-  display: flex;
-  flex-direction: column;
-}
-.customer-bill__actions button {
-  width: 100%;
-  margin-bottom: 18px;
-}
-.customer-bill .empty {
-  color: #a9a9a9;
-  text-align: center;
-  margin-top: 160px;
-}
-.customer-bill__items {
-  width: 75%;
-  animation-name: slideUp;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-}
+@media (max-width: 720px) {
+  header {
+    max-width: 85vw;
+  }
 
+  body {
+    width: 85%;
+    display: flex;
+  }
+  body .content {
+    display: block;
+    width: 85vw;
+  }
+  body .content .MuiTable-root-28 {
+    max-width: 100%;
+  }
+
+  .customer-bill {
+    width: max-content;
+    display: block;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    padding-bottom: 100px;
+  }
+  .customer-bill .empty {
+    color: #a9a9a9;
+    text-align: center;
+    margin-top: 160px;
+  }
+  .customer-bill__items {
+    width: 100%;
+    animation-name: slideUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  .customer-bill__items .MuiPaper-root-1 {
+    overflow-x: scroll;
+  }
+  .customer-bill__items ::-webkit-scrollbar {
+    width: 2px;
+    height: 3px;
+  }
+  .customer-bill__items .payment {
+    background-color: rgba(0, 236, 51, 0.555);
+  }
+}
+@media (min-width: 720px) {
+  .customer-bill {
+    width: max-content;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    padding-bottom: 100px;
+  }
+  .customer-bill__actions {
+    position: fixed;
+    top: 235px;
+    right: 9vw;
+    width: 181px;
+    display: flex;
+    flex-direction: column;
+  }
+  .customer-bill__actions button {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .customer-bill .empty {
+    color: #a9a9a9;
+    text-align: center;
+    margin-top: 160px;
+  }
+  .customer-bill__items {
+    width: 60%;
+    animation-name: slideUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  .customer-bill .payment {
+    background-color: rgba(0, 250, 154, 0.5);
+  }
+}
 .products {
   padding-bottom: 100px;
 }

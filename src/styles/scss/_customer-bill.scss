@@ -1,34 +1,95 @@
-.customer-bill {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    padding-bottom: 100px;
-
-    &__actions {
-        position: fixed;
-        top: 235px;
-        right: 9vw;
-        width: 181px;
+@media (max-width: 720px) {
+    header{
+        max-width: 85vw;
+    }
+    body {
+        width: 85%;
         display: flex;
-        flex-direction: column;
 
-        button {
-            width: 100%;
-            margin-bottom: 18px;
+        .content {
+            display: block;
+            width: 85vw;
+
+            .MuiTable-root-28 {
+                max-width: 100%;
+            }
         }
     }
+    .customer-bill {
+        width: max-content;
+        display: block;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        padding-bottom: 100px;
 
-    .empty {
-        color: getColor($themeColor, light);
-        text-align: center;
-        margin-top: 160px;
+        .empty {
+            color: getColor($themeColor, light);
+            text-align: center;
+            margin-top: 160px;
+        }
+
+        &__items {
+                width: 100%;
+                animation-name: slideUp;
+                animation-duration: .5s;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
+
+                .MuiPaper-root-1 {
+                    overflow-x: scroll;
+                }
+                ::-webkit-scrollbar {
+                    width: 2px;
+                    height: 3px;
+                }
+                .payment {
+                    background-color: rgba(0, 236, 51, 0.555);
+                }
+        }
     }
+}
+@media (min-width: 720px) {
+    .customer-bill {
+        width: max-content;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        padding-bottom: 100px;
 
-    &__items {
-        width: 75%;
-        animation-name: slideUp;
-        animation-duration: .5s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
+        &__actions {
+            position: fixed;
+            top: 235px;
+            right: 9vw;
+            width: 181px;
+            display: flex;
+            flex-direction: column;
+
+            button {
+                width: 100%;
+                margin-bottom: 18px;
+            }
+        }
+
+        .empty {
+            color: getColor($themeColor, light);
+            text-align: center;
+            margin-top: 160px;
+        }
+
+        &__items {
+                width: 60%;
+                animation-name: slideUp;
+                animation-duration: .5s;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
+        }
+
+        .payment {
+            background-color: rgba(0,250,154,0.5);
+        }
+
+        table {
+           // width: 100%;
+        }
     }
 }
