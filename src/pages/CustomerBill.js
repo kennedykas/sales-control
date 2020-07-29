@@ -268,6 +268,7 @@ export class CustomerBill extends Component {
             toast.open = true
             toast.message = result.error ? result.error : result.success
             this.setState({ toast: toast })
+            this.componentDidMount()
         } else {
             this.setState({ isLoaded: true, selectedRow: undefined })
             const toast = this.state.toast
