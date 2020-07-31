@@ -22,18 +22,18 @@
         justify-content: flex-start;
         padding-bottom: 100px;
 
-        .empty {
-            color: getColor($themeColor, light);
-            text-align: center;
-            margin-top: 160px;
-        }
-
         &__items {
                 width: 100%;
                 animation-name: slideUp;
                 animation-duration: .5s;
                 animation-timing-function: ease-out;
                 animation-fill-mode: forwards;
+
+                .empty {
+                    color: getColor($themeColor, light);
+                    text-align: center;
+                    margin-top: 160px;
+                }
 
                 .MuiPaper-root-1 {
                     overflow-x: scroll;
@@ -43,13 +43,14 @@
                     height: 3px;
                 }
                 .payment {
-                    background-color: rgba(0, 236, 51, 0.555);
+                    background-color: rgba(31, 218, 40, 0.582);
                 }
         }
     }
 }
-@media (min-width: 720px) {
+@media (min-width: 719px) {
     .customer-bill {
+        max-width: 100%;
         width: max-content;
         display: flex;
         flex-flow: row wrap;
@@ -70,26 +71,22 @@
             }
         }
 
-        .empty {
-            color: getColor($themeColor, light);
-            text-align: center;
-            margin-top: 160px;
-        }
-
         &__items {
-                width: 60%;
+                width: 75%;
                 animation-name: slideUp;
                 animation-duration: .5s;
                 animation-timing-function: ease-out;
                 animation-fill-mode: forwards;
+
+                .empty {
+                    color: getColor($themeColor, light);
+                    text-align: center;
+                    margin-top: 160px;
+                }
         }
 
         .payment {
-            background-color: rgba(0,250,154,0.5);
-        }
-
-        table {
-           // width: 100%;
+            background-color: rgba(31, 218, 40, 0.582);
         }
     }
 }
