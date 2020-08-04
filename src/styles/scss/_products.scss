@@ -1,8 +1,17 @@
 .products {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 10% 90%;
+    grid-template-areas:"header header" "list form" ;
     padding-bottom: 100px;
 
+    header {
+        grid-area: header ;
+    }
     &__list {
-        width: 74.5%;
+        grid-area: list;
+        width: 100%;
+        height: 100%;
         animation-name: slideUp;
         animation-duration: .5s;
         animation-timing-function: ease-out;
@@ -12,6 +21,7 @@
     @include column-form();
 
     &__form-fields {
+        grid-area: form;
         position: fixed;
         top: 220px;
         right: 9vw;

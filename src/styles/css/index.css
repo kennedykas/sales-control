@@ -51,7 +51,7 @@ header {
   top: 0;
   background-color: #eee;
   -moz-box-shadow: 0px 6px 32px 15px #eeeeee;
-  box-shadow: 0px 6px 32px 15px #eeeeee;
+  box-shadow: -20px 3px 20px 13px #eeeeee;
 }
 header h2 {
   margin-bottom: 0;
@@ -165,19 +165,23 @@ header strong {
     height: 3px;
   }
   .customer-bill__items .payment {
-    background-color: rgba(31, 218, 40, 0.582);
+    background-color: rgba(24, 136, 201, 0.664);
   }
 }
-@media (min-width: 719px) {
+@media (min-width: 720px) {
   .customer-bill {
-    max-width: 100%;
-    width: max-content;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
+    width: 101%;
+    display: grid;
+    grid-template-columns: 75% 30%;
+    grid-template-rows: 20% alto;
+    grid-template-areas: "header header" "list buttons";
     padding-bottom: 100px;
   }
+  .customer-bill header {
+    grid-area: header;
+  }
   .customer-bill__actions {
+    grid-area: buttons;
     position: fixed;
     top: 235px;
     right: 9vw;
@@ -190,7 +194,8 @@ header strong {
     margin-bottom: 18px;
   }
   .customer-bill__items {
-    width: 75%;
+    grid-area: list;
+    width: 100%;
     animation-name: slideUp;
     animation-duration: 0.5s;
     animation-timing-function: ease-out;
@@ -202,14 +207,23 @@ header strong {
     margin-top: 160px;
   }
   .customer-bill .payment {
-    background-color: rgba(31, 218, 40, 0.582);
+    background-color: rgba(26, 100, 219, 0.582);
   }
 }
 .products {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 10% 90%;
+  grid-template-areas: "header header" "list form";
   padding-bottom: 100px;
 }
+.products header {
+  grid-area: header;
+}
 .products__list {
-  width: 74.5%;
+  grid-area: list;
+  width: 100%;
+  height: 100%;
   animation-name: slideUp;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -229,6 +243,7 @@ header strong {
   margin: auto;
 }
 .products__form-fields {
+  grid-area: form;
   position: fixed;
   top: 220px;
   right: 9vw;
@@ -248,6 +263,9 @@ header strong {
   flex-direction: column;
   justify-content: space-between;
   height: 24vh;
+}
+.login .login-fields .MuiFormControl-root-1 {
+  margin-bottom: 20px;
 }
 .login .login-fields button {
   margin: 0 auto;
