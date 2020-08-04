@@ -316,7 +316,7 @@ export class ItemDialog extends Component {
                 root.props.refresh()
             })
             this.clearState()
-            //this.componentDidMount()
+            this.componentDidMount()
         } else {
             this.setState({ fetching: false })
             const toast = this.state.toast
