@@ -10,10 +10,7 @@ export class InvoiceTable extends Component {
     constructor (props) {
         super(props)
         const options = {
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: false,
-            timeZone: 'America/Sao_Paulo'
+            year: 'numeric', month: 'numeric', day: 'numeric'
         }
         this.intl = new Intl.DateTimeFormat('pt-BR', options)
         this.intl2 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -23,7 +20,6 @@ export class InvoiceTable extends Component {
         const { items, root, client } = this.props
         return (
             <>
-            <section className="customer-bill">
                 <header>
                     <h2>{ client.name } { this.clientStatus() }</h2>
                     <strong>*Importante, o valor dos produtos está sujeito a reajustes sem aviso prévio.</strong>
@@ -35,34 +31,31 @@ export class InvoiceTable extends Component {
                         Nada encontrado.
                     </h2>
                     <Paper hidden={ !items.length }>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell numeric>Quantidade</TableCell>
-                                    <TableCell>Produto</TableCell>
-                                    <TableCell>Data</TableCell>
-                                    <TableCell numeric>Unitário (R$)</TableCell>
-                                    <TableCell numeric>Total (R$)</TableCell>
+                        <Table className="invoiceTable" >
+                            <TableHead className="tableHead">
+                                <TableRow className="tableRowHeder">
+                                    <TableCell className="tableCellHeader" numeric>Qtd</TableCell>
+                                    <TableCell className="tableCellHeader">Produto</TableCell>
+                                    <TableCell className="tableCellHeader">Data</TableCell>
+                                    <TableCell className="tableCellHeader" numeric>Unitário</TableCell>
+                                    <TableCell className="tableCellHeader" numeric>Total</TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                            <TableBody className="tableBody">
                             { items.map((item, i) => {
                                 const backgroundColor = item.product ? '' : 'payment'
                                 return (
-                                    <TableRow
+                                    <TableRow className="tableRowBody"
                                     className = {backgroundColor}
                                     onClick = { this.props.onClickRow }
                                     selected = { root.state.selectedRow === i }
                                     hover = { true }
                                     key = { i }>
-                                        <TableCell numeric>{ item.amount }</TableCell>
-                                        <TableCell >{ item.product ? item.product.descrition : '' }
-                                        </TableCell>
-                                        <TableCell>{ this.intl.format(new Date(item.createdAt)) }</TableCell>
-                                        <TableCell numeric>
-                                            { item.product ? this.intl2.format(item.product.price) : '' }
-                                        </TableCell>
-                                        <TableCell numeric>
+                                        <TableCell className="tableCellBody" numeric>{ item.amount }</TableCell>
+                                        <TableCell className="tableCellBody" >{ item.product ? item.product.descrition : '' }</TableCell>
+                                        <TableCell className="tableCellBody" >{ this.intl.format(new Date(item.createdAt)) }</TableCell>
+                                        <TableCell className="tableCellBody" numeric>{ item.product ? this.intl2.format(item.product.price) : '' }</TableCell>
+                                        <TableCell className="tableCellBody" numeric>
                                             { item.product ?
                                                 this.intl2.format(item.amount * item.product.price) :
                                                 this.intl2.format(item.paymentAmount) }
@@ -74,7 +67,6 @@ export class InvoiceTable extends Component {
                         </Table>
                     </Paper>
                 </section>
-            </section>
             </>
         )
     }
