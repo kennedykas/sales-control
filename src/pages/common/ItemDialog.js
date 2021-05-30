@@ -34,7 +34,7 @@ export class ItemDialog extends Component {
 
             getProducts (page) {
                 let p = page ? page : 1
-                fetch(`http://localhost:3001/api/products?page=${p}&limit=5`, {
+                fetch(`${process.env.REACT_APP_API_URL}/api/products?page=${p}&limit=5`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
                 })
@@ -78,7 +78,6 @@ export class ItemDialog extends Component {
     render () {
         const { error, isLoaded, products } = this.state
         if (error) return <div>Error: { error.message }</div>
-        //else if (!isLoaded) return <div>Carregando...</div>
         else {
             let inputs
             if (this.state.item.amount) {
@@ -87,7 +86,6 @@ export class ItemDialog extends Component {
                     <>
                     <InputList
                         value = { this.state.productName }
-                        //product = { this.state.item.product }
                         autoFocus = { true }
                         onChange = { e => this.handleProductChange(e) }
                         onClick = { () => document.execCommand('selectall', null, false) }
@@ -112,7 +110,7 @@ export class ItemDialog extends Component {
                 inputs =
                     <TextField
                         autoFocus ={ true }
-                        onFocus = { () => document.execCommand("selectall", null, false) }
+                        onFocus = { () => document.execCommand('selectall', null, false) }
                         onChange = { e => this.handlePaymentChange(e) }
                         value = { this.state.item.paymentAmount || '' }
                         label = "Quantia em R$"
@@ -244,7 +242,7 @@ export class ItemDialog extends Component {
 
     deleteSale () {
         this.toggleClearDialog()
-        fetch('http://localhost:3001/api/bills/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills/`, {
             method: 'DELETE',
             body: JSON.stringify({ id: this.state.item._id }),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -257,7 +255,7 @@ export class ItemDialog extends Component {
     }
 
     saveSale () {
-        fetch('http://localhost:3001/api/bills/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills/`, {
             method: 'POST',
             body: JSON.stringify(this.state.item),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -270,7 +268,7 @@ export class ItemDialog extends Component {
     }
 
     updateSale () {
-        fetch('http://localhost:3001/api/bills/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills/`, {
             method: 'PUT',
             body: JSON.stringify({
                 id: this.state.item._id,
@@ -288,7 +286,7 @@ export class ItemDialog extends Component {
     }
 
     updatePayment () {
-        fetch('http://localhost:3001/api/bills/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills/`, {
             method: 'PUT',
             body: JSON.stringify({
                 id: this.state.item._id,

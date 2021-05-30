@@ -37,7 +37,7 @@ export class Product extends Component {
 
     getProducts (page) {
         let p = page ? page : 1
-        fetch(`http://localhost:3001/api/products?page=${p}&limit=10`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/products?page=${p}&limit=10`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
@@ -191,7 +191,7 @@ export class Product extends Component {
     }
 
     saveProduct () {
-        fetch('http://localhost:3001/api/products/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/products/`, {
             method: 'POST',
             body: JSON.stringify(this.state.product),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -206,7 +206,7 @@ export class Product extends Component {
     }
 
     updateProduct () {
-        fetch('http://localhost:3001/api/products/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/products/`, {
             method: 'PUT',
             body: JSON.stringify(this.state.product),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -250,7 +250,7 @@ export class Product extends Component {
     }
 
     deleteProduct () {
-        fetch('http://localhost:3001/api/products', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/products`, {
             method: 'DELETE',
             body: JSON.stringify(this.state.product),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }

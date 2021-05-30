@@ -49,7 +49,7 @@ export class ClientSideCustumerBill extends Component {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('disconnected', 'true')
-        fetch(`http://localhost:3001/api/billCustomer?userId=${this.state.client._id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/billCustomer?userId=${this.state.client._id}`, {
             method: 'GET',
             headers: myHeaders
         })
@@ -65,7 +65,7 @@ export class ClientSideCustumerBill extends Component {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('disconnected', 'true')
-        fetch(`http://localhost:3001/api/billCustomer?userId=${this.state.client._id}&page=${p}&limit=15`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/billCustomer?userId=${this.state.client._id}&page=${p}&limit=15`, {
             method: 'GET',
             headers: myHeaders
         })

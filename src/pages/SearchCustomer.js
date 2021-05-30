@@ -25,7 +25,7 @@ export class SearchCustomer extends Component {
         const myHeaders = new Headers()
         myHeaders.append('Authorization', sessionStorage.getItem('authToken'))
         myHeaders.append('Content-Type', 'application/json')
-        fetch(`http://localhost:3001/api/user?page=${p}&limit=100`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user?page=${p}&limit=100`, {
             method: 'GET',
             headers: myHeaders
         })

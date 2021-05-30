@@ -22,7 +22,7 @@ export class Customer extends Component {
             { client: JSON.parse(localStorage.getItem('client')) },
             () => {
                 if (this.state.client._id) {
-                    fetch(`http://localhost:3001/api/user?id=${this.state.client._id}`, {
+                    fetch(`${process.env.REACT_APP_API_URL}/api/user?id=${this.state.client._id}`, {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
                     })
@@ -124,7 +124,7 @@ export class Customer extends Component {
     }
 
     deleteCustomer (e) {
-        fetch('http://localhost:3001/api/user/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
             method: 'DELETE',
             body: JSON.stringify(this.state.client),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -139,7 +139,7 @@ export class Customer extends Component {
     }
 
     saveClient () {
-        fetch('http://localhost:3001/api/user/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
             method: 'POST',
             body: JSON.stringify(this.state.client),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
@@ -174,7 +174,7 @@ export class Customer extends Component {
     }
 
     updateClient () {
-        fetch('http://localhost:3001/api/user/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
             method: 'PUT',
             body: JSON.stringify(this.state.client),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }

@@ -65,7 +65,7 @@ export class Login extends Component {
     }
 
     login () {
-        fetch('http://localhost:3000/auth/authenticate', {
+        fetch(`${process.env.REACT_APP_API_URL}/auth/authenticate`, {
             method: 'POST',
             body: JSON.stringify(this.state.user),
             headers: { 'Content-Type': 'application/json' }

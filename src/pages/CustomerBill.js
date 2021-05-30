@@ -62,7 +62,7 @@ export class CustomerBill extends Component {
         const myHeaders = new Headers()
         myHeaders.append('Authorization', sessionStorage.getItem('authToken'))
         myHeaders.append('Content-Type', 'application/json')
-        fetch(`http://localhost:3001/api/bills?userId=${this.state.client._id}&page=${p}&limit=15`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills?userId=${this.state.client._id}&page=${p}&limit=15`, {
             method: 'GET',
             headers: myHeaders
         })
@@ -80,7 +80,7 @@ export class CustomerBill extends Component {
     }
 
     getClient () {
-        fetch('http://localhost:3001/api/clients?_sort=-id')
+        fetch(`${process.env.REACT_APP_API_URL}/api/clients?_sort=-id`)
         .then(res => res.json())
         .then(
             (result) => {
@@ -176,7 +176,7 @@ export class CustomerBill extends Component {
     }
 
     copyUrl () {
-        navigator.clipboard.writeText(`http://localhost:3001/#/bill?_id=${this.state.client._id}`)
+        navigator.clipboard.writeText(`${process.env.REACT_APP_API_URL}/#/bill?_id=${this.state.client._id}`)
     }
 
     closeToast () {
@@ -213,7 +213,7 @@ export class CustomerBill extends Component {
 
     deleteClientItems () {
         this.setState({ isLoaded: false })
-        fetch('http://localhost:3001/api/bills/', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/bills/`, {
             method: 'PATCH',
             body: JSON.stringify({ customer: JSON.parse(localStorage.getItem('client'))._id }),
             headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
