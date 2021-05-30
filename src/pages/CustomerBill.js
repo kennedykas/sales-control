@@ -176,7 +176,7 @@ export class CustomerBill extends Component {
     }
 
     copyUrl () {
-        navigator.clipboard.writeText(`${process.env.REACT_APP_API_URL}/#/bill?_id=${this.state.client._id}`)
+        navigator.clipboard.writeText(`${window.location.origin}/#/bill?_id=${this.state.client._id}`)
     }
 
     closeToast () {
