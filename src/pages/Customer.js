@@ -1,93 +1,90 @@
 /* jshint esversion: 6 */
-import React, { Component } from 'react';
-import TextField            from '@material-ui/core/TextField';
-import Button               from '@material-ui/core/Button';
-import Snackbar             from '@material-ui/core/Snackbar';
-import NavLink              from 'react-router-dom/NavLink';
-import PersonAdd            from '@material-ui/icons/PersonAdd';
+import React, { Component } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
+import NavLink from 'react-router-dom/NavLink'
+import PersonAdd from '@material-ui/icons/PersonAdd'
+import ManageResponse from './common/ManageResponse'
 
 export class Customer extends Component {
-
-    constructor(props) {
-        super(props);
+    constructor (props) {
+        super(props)
         this.state = {
-            client  : { id: null, name: '', phone: '', email: '', 'register-date': '' },
+            client: { _id: null, name: '', phone: '', email: '', createdAt: '' },
             isLoaded: false,
-            toast   : { open: false, message: '' }
-        };
+            toast: { open: false, message: '' }
+        }
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.setState(
             { client: JSON.parse(localStorage.getItem('client')) },
             () => {
-                if (this.state.client.id) {
-                    fetch(`http://localhost:3001/api/clients/${Number(this.state.client.id)}`)
-                    .then(res => res.json())
+                if (this.state.client._id) {
+                    fetch(`${process.env.REACT_APP_API_URL}/api/user?id=${this.state.client._id}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+                    })
+                    .then(res => {
+                        return ManageResponse.checkStatusCode(res)
+                    })
                     .then(
                         (result) => {
-                            this.setState({ isLoaded: true, client: result[0] });
+                            this.setState({ isLoaded: true, client: result })
                         },
-                        (error) => {
-                            this.setState({ isLoaded: true, error });
-                        }
-                    );
+                        () => { this.handleResult() }
+                    )
                 } else {
-                    this.setClient();
-                    this.setState({ isLoaded: true });
+                    this.setClient()
+                    this.setState({ isLoaded: true })
                 }
             }
-        );
+        )
     }
 
-    render() {
-        const { error, isLoaded, client} = this.state;
-
-        if (error)
-            return <div>Error: { error.message }</div>;
-
-        else if (!isLoaded)
-            return <div>Carregando...</div>;
-
+    render () {
+        const { error, isLoaded, client } = this.state
+        if (error) return <div>Error: { error.message }</div>
+        else if (!isLoaded) return <div>Carregando...</div>
         else {
             return (
             <section className="customer">
-
                 <header><h2><PersonAdd /> Cliente</h2></header>
 
                 <form className="customer__form-fields">
                     <TextField
-                        id        ="client-name"
+                        id ="client-name"
                         className ="upper"
-                        label     ="Nome Completo"
-                        variant   ="outlined"
-                        inputProps={{ pattern: '.{3,}' }}
-                        autoFocus ={ client.name === '' }
-                        value     ={ client.name }
-                        onChange  ={ e => this.setClient('name', e.target.value) }
+                        label ="Nome Completo"
+                        variant = "outlined"
+                        inputProps = {{ pattern: '.{3,}' }}
+                        autoFocus = { client.name === '' }
+                        value = { this.state.client.name }
+                        onChange = { e => this.setClient('name', e.target.value) }
                         required />
 
                     <TextField
-                        type     ="number"
-                        label    ="Celular"
-                        variant  ="outlined"
-                        autoFocus={ client.name !== '' }
-                        value    ={ client.phone }
-                        onChange ={ e => this.setClient('phone', e.target.value) } />
+                        type ="number"
+                        label = "Celular"
+                        variant = "outlined"
+                        autoFocus = { client.name !== '' }
+                        value = { this.state.client.phone }
+                        onChange = { e => this.setClient('phone', e.target.value) } />
 
                     <TextField
-                        type    ="email"
-                        label   ="E-mail"
-                        variant ="outlined"
-                        value   ={ client.email }
-                        onChange={ e => this.setClient('email', e.target.value) } />
+                        type = "email"
+                        label = "E-mail"
+                        variant = "outlined"
+                        value = { client.email }
+                        onChange = { e => this.setClient('email', e.target.value) } />
 
-                    <div className="actions">
+                    <div className = "actions">
                         <Button
-                            variant="outlined"
-                            color  ="primary"
-                            type   ="submit"
-                            onClick={ e => this.storeData(e) }>
+                            variant = "outlined"
+                            color = "primary"
+                            type = "submit"
+                            onClick = { e => this.storeData(e) }>
                             SALVAR
                         </Button>
                         <NavLink to="/" tabIndex="-1">
@@ -95,85 +92,103 @@ export class Customer extends Component {
                                 CANCELAR
                             </Button>
                         </NavLink>
+                        {
+                            this.state.client._id ?
+                            <Button
+                            variant = "outlined"
+                            color = "secondary"
+                            type = "submit"
+                            onClick = { e => this.deleteCustomer(e) }>
+                            EXCLUIR
+                            </Button> : ''
+
+                        }
                     </div>
                 </form>
 
                 <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open        ={ this.state.toast.open }
-                    message     ={ this.state.toast.message }
-                    autoHideDuration={ 3500 } />
+                    anchorOrigin = {{ vertical: 'top', horizontal: 'right' }}
+                    open = { this.state.toast.open }
+                    message = { this.state.toast.message }
+                    autoHideDuration = { 3500 } />
             </section>
             )
         }
     }
 
-    storeData(e) {
-
-        e.preventDefault();
-
-        localStorage.setItem('client', JSON.stringify(this.state.client));
-
-        if (!document.querySelector('.customer__form-fields').checkValidity())
-            return false;
-
-        this.state.client.id ? this.updateClient() : this.saveClient();
+    storeData (e) {
+        e.preventDefault()
+        localStorage.setItem('client', JSON.stringify(this.state.client))
+        if (!document.querySelector('.customer__form-fields').checkValidity()) return false
+        this.state.client._id ? this.updateClient() : this.saveClient()
     }
 
-    saveClient() {
-
-        fetch('http://localhost:3001/api/clients/', {
-            method: "POST",
+    deleteCustomer (e) {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
+            method: 'DELETE',
             body: JSON.stringify(this.state.client),
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
         .then(
-            (result) => { this.handleResult('/customer/details'); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
-    handleResult(page) {
-
-        const root = this;
-        const toast   = this.state.toast;
-        toast.open    = true;
-        toast.message = '✔️ Salvo com sucesso!';
-
-        this.setState({ 'toast': toast }, () => {
-            setTimeout(() => {
-                root.props.history.push(page);
-            }, 1000);
-        });
-    }
-
-    updateClient() {
-
-        fetch('http://localhost:3001/api/clients/', {
-            method: "PUT",
+    saveClient () {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
+            method: 'POST',
             body: JSON.stringify(this.state.client),
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
         })
-        .then(res => res.json())
+        .then(res => {
+            return ManageResponse.checkStatusCode(res)
+        })
         .then(
-            (result) => { this.handleResult('/'); },
-            (error)  => { this.setState({ isLoaded: true, error }); }
-        );
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
     }
 
-    setClient(key, value) {
+    handleResult (result) {
+        if (result) {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = result.error ? result.error : result.success
+            this.setState({ toast: toast }, () => {
+                setTimeout(() => {
+                    this.props.history.push('/')
+                }, 500)
+            })
+        } else {
+            this.setState({ fetching: false })
+            const toast = this.state.toast
+            toast.open = true
+            toast.message = 'Problemas na comunicação.'
+            this.setState({ toast: toast })
+        }
+    }
 
-        const client = this.state.client;
+    updateClient () {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/`, {
+            method: 'PUT',
+            body: JSON.stringify(this.state.client),
+            headers: { 'Content-Type': 'application/json', Authorization: sessionStorage.getItem('authToken') }
+        })
+        .then(res => { return ManageResponse.checkStatusCode(res) })
+        .then(
+            result => { this.handleResult(result) },
+            () => { this.handleResult() }
+        )
+    }
 
-        if (key)
-            client[key]  = value.toUpperCase();
-
-        client['register-date'] =
-            client['register-date'] ?
-            client['register-date'].slice(0, 10) :
-            new Date().toISOString().slice(0, 10);
-
-        this.setState({ 'client': client });
+    setClient (key, value) {
+        const client = this.state.client
+        if (key) client[key] = value.toUpperCase()
+        this.setState({ client: client })
     }
 }

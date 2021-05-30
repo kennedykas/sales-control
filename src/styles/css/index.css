@@ -51,7 +51,7 @@ header {
   top: 0;
   background-color: #eee;
   -moz-box-shadow: 0px 6px 32px 15px #eeeeee;
-  box-shadow: 0px 6px 32px 15px #eeeeee;
+  box-shadow: -20px 3px 20px 13px #eeeeee;
 }
 header h2 {
   margin-bottom: 0;
@@ -121,42 +121,109 @@ header strong {
   margin-top: 20vh;
 }
 
-.customer-bill {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  padding-bottom: 100px;
-}
-.customer-bill__actions {
-  position: fixed;
-  top: 235px;
-  right: 9vw;
-  width: 181px;
-  display: flex;
-  flex-direction: column;
-}
-.customer-bill__actions button {
-  width: 100%;
-  margin-bottom: 18px;
-}
-.customer-bill .empty {
-  color: #a9a9a9;
-  text-align: center;
-  margin-top: 160px;
-}
-.customer-bill__items {
-  width: 75%;
-  animation-name: slideUp;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-}
+@media (max-width: 720px) {
+  header {
+    max-width: 85vw;
+  }
 
+  body {
+    width: 85%;
+    display: flex;
+  }
+  body .content {
+    display: block;
+    width: 85vw;
+  }
+  body .content .MuiTable-root-28 {
+    max-width: 100%;
+  }
+
+  .customer-bill {
+    width: max-content;
+    display: block;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    padding-bottom: 100px;
+  }
+  .customer-bill__items {
+    width: 100%;
+    animation-name: slideUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  .customer-bill__items .empty {
+    color: #a9a9a9;
+    text-align: center;
+    margin-top: 160px;
+  }
+  .customer-bill__items .MuiPaper-root-1 {
+    overflow-x: scroll;
+  }
+  .customer-bill__items ::-webkit-scrollbar {
+    width: 2px;
+    height: 3px;
+  }
+  .customer-bill__items .payment {
+    background-color: rgba(24, 136, 201, 0.664);
+  }
+}
+@media (min-width: 720px) {
+  .customer-bill {
+    width: 101%;
+    display: grid;
+    grid-template-columns: 75% 30%;
+    grid-template-rows: 20% alto;
+    grid-template-areas: "header header" "list buttons";
+    padding-bottom: 100px;
+  }
+  .customer-bill header {
+    grid-area: header;
+  }
+  .customer-bill__actions {
+    grid-area: buttons;
+    position: fixed;
+    top: 235px;
+    right: 9vw;
+    width: 181px;
+    display: flex;
+    flex-direction: column;
+  }
+  .customer-bill__actions button {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .customer-bill__items {
+    grid-area: list;
+    width: 100%;
+    animation-name: slideUp;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  .customer-bill__items .empty {
+    color: #a9a9a9;
+    text-align: center;
+    margin-top: 160px;
+  }
+  .customer-bill .payment {
+    background-color: rgba(26, 100, 219, 0.582);
+  }
+}
 .products {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 10% 90%;
+  grid-template-areas: "header header" "list form";
   padding-bottom: 100px;
+}
+.products header {
+  grid-area: header;
 }
 .products__list {
-  width: 74.5%;
+  grid-area: list;
+  width: 100%;
+  height: 100%;
   animation-name: slideUp;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -176,10 +243,32 @@ header strong {
   margin: auto;
 }
 .products__form-fields {
+  grid-area: form;
   position: fixed;
   top: 220px;
   right: 9vw;
   width: fit-content;
+}
+
+.login {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  background-color: 0;
+}
+.login .login-fields {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 24vh;
+}
+.login .login-fields .MuiFormControl-root-1 {
+  margin-bottom: 20px;
+}
+.login .login-fields button {
+  margin: 0 auto;
 }
 
 /*# sourceMappingURL=index.css.map */
