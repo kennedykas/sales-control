@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sass": "sass --watch src/styles/scss:src/styles/css"
+    "sass": "sass --watch src/styles/scss:src/styles/css",
+    "eslint-plugin-import": "^2.22.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,7 +34,6 @@
   ],
   "devDependencies": {
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.3",
