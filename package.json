@@ -13,15 +13,15 @@
     "react-dom": "^16.6.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
-    "sass": "^1.26.10"
+    "sass": "^1.26.10",
+    "eslint-plugin-import": "^2.22.0"
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sass": "sass --watch src/styles/scss:src/styles/css",
-    "eslint-plugin-import": "^2.22.0"
+    "sass": "sass --watch src/styles/scss:src/styles/css"
   },
   "eslintConfig": {
     "extends": "react-app"
